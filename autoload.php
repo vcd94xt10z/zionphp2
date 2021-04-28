@@ -1,4 +1,4 @@
 <?php
-echo "test";
+echo "zionphp2";
 exit();
 ?>
