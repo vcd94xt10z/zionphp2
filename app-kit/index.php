@@ -1,6 +1,6 @@
 <?php
 $zionphp2 = [
-    "configFile" => "c:\webserver\sites\localhost\config.json"
+    "configFile" => dirname($_SERVER["DOCUMENT_ROOT"])."/config.json"
 ];
 require(dirname(dirname(dirname(__FILE__)))."/zionphp2/autoload.php");
 
