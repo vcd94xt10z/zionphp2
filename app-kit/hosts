@@ -1,0 +1,5 @@
+127.0.0.1 app
+127.0.0.1 app.des
+127.0.0.1 app.qas
+127.0.0.1 app.local.des
+127.0.0.1 app.local.qas
