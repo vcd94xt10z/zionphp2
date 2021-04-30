@@ -32,6 +32,9 @@ if(\zion\ENV == "PRD"){
     ini_set('display_startup_errors', 1);
 }
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 // funções
 require(\zion\ROOT."functions.php");
 
@@ -49,4 +52,19 @@ if(is_array($zionphp2)){
     $customConfigFile = $file;
 }
 define("zion\customConfigFile",$customConfigFile);
+
+// configuração do arquivo
+$config = zion_get_config_all();
+
+// registrando autoload do sistema
+spl_autoload_register("zionphp_autoload");
+
+// inicialização
+\zion\core\System::configure();
+
+// iniciando a Sessão para forçar a criação do cookie e evitar possíveis problemas
+//\zion\core\Session::init();
+
+// modulos
+\zion\core\Zion::route();
 ?>
