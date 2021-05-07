@@ -111,7 +111,7 @@ class Session {
 	        return;
 	    }
 	    
-	    self::$folder = \zion\ROOT."tmp".\DS."session".\DS;
+	    self::$folder = \zion\APP_ROOT."tmp".\DS."session".\DS;
 	    if(!array_key_exists(self::$sessionKey,$_COOKIE) OR $_COOKIE[self::$sessionKey] == ""){
 	        self::createSession();
 	    }else{
@@ -143,7 +143,8 @@ class Session {
 	    if($id == null){
 	       $id = md5(uniqid("server1",true).rand(100000,999999));
 	    }
-	    setcookie(self::$sessionKey,$id,time()+self::$expireTime,"/");
+	    //setcookie(self::$sessionKey,$id,time()+self::$expireTime,"/");
+	    setcookie(self::$sessionKey,$id);
 		self::$id = $id;
 		self::$info = self::createInfo();
     }
