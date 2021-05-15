@@ -35,7 +35,7 @@ function zion_get_config_all(){
  * @return []
  */
 function zion_get_config($filename,$stopOnError=true){
-    $file = dirname($_SERVER["DOCUMENT_ROOT"])."/config/".$filename;
+    $file = dirname($_SERVER["DOCUMENT_ROOT"])."/".$filename;
     if(!file_exists($file)){
         if(!$stopOnError){
             return;
@@ -60,19 +60,6 @@ function zion_get_config($filename,$stopOnError=true){
  * @return boolean
  */
 function zionphp_autoload($className) {
-    // zion: módulos
-    if(strpos($className, "zion\\mod\\") === 0) {
-        $className = str_replace("\\","/",$className);
-        $className = str_replace("zion/mod/","modules/",$className);
-        $file       = \zion\ROOT.$className.".class.php";
-        
-        if(file_exists($file)) {
-            require_once($file);
-            return true;
-        }
-        return false;
-    }
-    
     // zion: framework / biblioteca
     $className2 = str_replace("zion\\","src\\zion\\",$className);
     $file = \zion\ROOT.str_replace("\\","/",$className2).".class.php";
@@ -81,32 +68,8 @@ function zionphp_autoload($className) {
         return true;
     }
     
-    // app: biblioteca
-    if(strpos($className, "app\\") === 0){
-        $folder = rtrim(dirname($_SERVER["DOCUMENT_ROOT"]))."/app/";
-        $file = str_replace("app\\",$folder,$className).".class.php";
-        $file = str_replace("\\","/",$file);
-        if(file_exists($file)){
-            require_once($file);
-            return true;
-        }
-        return false;
-    }
-    
-    // app: biblioteca
-    if(strpos($className, "lib\\") === 0){
-        $folder = rtrim(dirname($_SERVER["DOCUMENT_ROOT"]))."/src/";
-        $file = str_replace("src\\",$folder,$className).".class.php";
-        $file = str_replace("\\","/",$file);
-        if(file_exists($file)){
-            require_once($file);
-            return true;
-        }
-        return false;
-    }
-    
     // app: módulos
-    if(strpos($className, "mod\\") === 0){
+    if(strpos($className, "\\mod\\") === 0){
         $parts = explode("\\", $className);
         $parts[0] = "modules";
         
@@ -116,6 +79,16 @@ function zionphp_autoload($className) {
             return true;
         }
         return false;
+    }
+    
+    // app: biblioteca
+    $folder = rtrim(dirname($_SERVER["DOCUMENT_ROOT"]))."/src/";
+    $file = $folder.$className.".class.php";
+    $file = str_replace("\\","/",$file);
+    
+    if(file_exists($file)){
+        require_once($file);
+        return true;
     }
     
     return false;

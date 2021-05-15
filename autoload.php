@@ -38,26 +38,14 @@ ini_set('display_startup_errors', 1);
 // funções
 require(\zion\ROOT."functions.php");
 
-// A configuração não é obrigatória, porém, se não for feita, não poderá ser utilizado todos os recursos
-// como persistência por exemplo.
-$customConfigFile = "";
-if(is_array($zionphp2)){
-    $file = $zionphp2["configFile"];
-    if(!file_exists($file)){
-        http_response_code(500);
-        echo "O arquivo de configuração ".$file." não existe";
-        exit();
-    }
-    
-    $customConfigFile = $file;
-}
-define("zion\customConfigFile",$customConfigFile);
+// registrando autoload do sistema
+spl_autoload_register("zionphp_autoload");
 
 // configuração do arquivo
 $config = zion_get_config_all();
 
-// registrando autoload do sistema
-spl_autoload_register("zionphp_autoload");
+// deixando a configuração global
+\zion\core\System::set("config",$config);
 
 // inicialização
 \zion\core\System::configure();
