@@ -268,6 +268,11 @@ class System {
 	 */
 	public static function getConnection(string $configKey = 'database'){
 	    $config = System::get($configKey);
+	    if($config == null){
+	        http_response_code(500);
+	        echo "[zion] Nenhuma configuração de banco encontrada, verifique se o arquivo de configuração foi criado corretamente";
+	        exit();
+	    }
 	    
 	    $driverOptions = array(
 	        \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
