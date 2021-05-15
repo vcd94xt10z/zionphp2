@@ -12,7 +12,7 @@ function zion_get_config_all(){
     $all = [];
     
     // configuração básica
-    $json = zion_get_config("config.json",true);
+    $json = zion_get_config("config.json",false);
     $json = is_array($json)?$json:array();
     foreach($json AS $key => $value){
         $all[$key] = $value;
