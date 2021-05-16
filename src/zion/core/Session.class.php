@@ -17,7 +17,7 @@ use zion\utils\StringUtils;
  * tempo configurado na classe e o arquivo no servidor será deletado. O cookie no frontend nunca é eliminado
  * pela classe (Cookie de Sessao)
  */
-class Session2 {
+class Session {
     public static $sessionKey = "APP_SESSIONID";
     
     /**
@@ -35,7 +35,7 @@ class Session2 {
     
     private static $folder      = "/tmp/";
     
-    public static function staticConstructor(){
+    public static function configure(){
         self::$folder = \zion\APP_ROOT."tmp".\DS."session".\DS;
     }
     
@@ -223,7 +223,6 @@ class Session2 {
         }
         
         $file = self::getFile();
-        echo $file;
         $f = @fopen($file,"w");
         if($f !== false){
             fwrite($f,serialize($content));
@@ -279,5 +278,4 @@ class Session2 {
         }
     }
 }
-Session2::staticConstructor();
 ?>

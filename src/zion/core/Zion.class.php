@@ -139,7 +139,7 @@ class Zion {
         
         // exceções
         if($zionuriEnabled){
-            $user = Session2::get("user");
+            $user = Session::get("user");
             
             $checkACL = true;
             if(self::isFreeURI() OR ($user != null AND $user->perfil == "admin")){
@@ -284,7 +284,7 @@ class Zion {
     public static function checkSession(){
         // verificando se o usuário esta logado
         if(!self::isFreeURI()){
-            $user = Session2::get("user");
+            $user = Session::get("user");
             if($user == null){
                 HTTPUtils::status(401);
                 HTTPUtils::template(401);

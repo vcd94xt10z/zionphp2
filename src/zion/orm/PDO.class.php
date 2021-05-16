@@ -1,7 +1,7 @@
 <?php
 namespace zion\orm;
 
-use zion\core\Session2;
+use zion\core\Session;
 use zion\core\System;
 use zion\utils\TimeCounter;
 
@@ -50,8 +50,8 @@ class PDO extends \PDO {
 		}
 		TimeCounter::stop("query");
 		
-		if(Session2::get("trace") == 1){
-			Session2::add("traceSQL",array(
+		if(Session::get("trace") == 1){
+			Session::add("traceSQL",array(
 				"sql"       => $sql,
 				"errorMessage" => $errorMessage,
 				"type"      => "query",
@@ -93,8 +93,8 @@ class PDO extends \PDO {
 		}
 		TimeCounter::stop("exec");
 
-		if(Session2::get("trace") == 1){
-			Session2::add("traceSQL",array(
+		if(Session::get("trace") == 1){
+			Session::add("traceSQL",array(
 				"sql"       => $sql,
 				"errorMessage" => $errorMessage,
 				"type"      => "update",
