@@ -69,7 +69,7 @@ function zionphp_autoload($className) {
     }
     
     // app: módulos
-    if(strpos($className, "\\mod\\") === 0){
+    if(strpos($className, "mod\\") === 0){
         $parts = explode("\\", $className);
         $parts[0] = "modules";
         

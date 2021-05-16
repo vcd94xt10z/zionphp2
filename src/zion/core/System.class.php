@@ -54,21 +54,6 @@ class System {
 	    
 	    // valida o espaço disponível
 	    self::checkStorage();
-	    
-	    // view
-	    Page::jsBulk(array(
-	        "/zion/lib/zion/native.js",
-	        "/zion/lib/jquery.mask/jquery.mask.min.js",
-	        "/zion/lib/sweetalert/sweetalert.min.js",
-	        "/zion/lib/notifyjs/notify.min.js",
-	        "/zion/lib/zion/default.js",
-	        "/zion/lib/cssmenumaker/script.js"
-	    ));
-	    
-	    Page::cssBulk(array(
-	        "/zion/lib/zion/default.css",
-	        "/zion/lib/cssmenumaker/styles.css"
-	    ));
 	}
 	
 	/**

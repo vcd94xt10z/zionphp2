@@ -48,7 +48,10 @@ class Page {
      * Dados utilizados na view
      * @var array
      */
-    private static $data = array();
+    private static $data = array(
+        "js" => [],
+        "css" => []
+    );
     
     public static function set($key,$value){
         self::$data[$key] = $value;
@@ -125,41 +128,6 @@ class Page {
     }
     
     /**
-     * Carrega as bibliotecas
-     */
-    public static function loadLibs(array $libs){
-        $js  = array();
-        $css = array();
-        
-        foreach($libs AS $libName => $libVersion){
-            switch(strtolower($libName)){
-            case "jquery":
-                if($libVersion == 3){
-                    $js[] = "/zion/lib/jquery/jquery-3.3.1.min.js";
-                }else{
-                    $js[] = "/zion/lib/jquery/jquery-3.3.1.min.js";
-                }
-                break;
-            case "bootstrap":
-                if($libVersion == 3){
-                    $css[] = "/zion/lib/bootstrap-3.3.7/dist/css/bootstrap.min.css";
-                    $css[] = "/zion/lib/bootstrap-3.3.7/dist/css/bootstrap-theme.min.css";
-                    $js[] = "/zion/lib/bootstrap-3.3.7/dist/js/bootstrap.min.js";
-                }else{
-                    $js[] = "/zion/lib/popper/popper.min.js";
-                    $js[] = "/zion/lib/bootstrap-4.2.1-dist/js/bootstrap.min.js";
-                    $css[] = "/zion/lib/bootstrap-4.2.1-dist/css/bootstrap.min.css";
-                    $css[] = "/zion/lib/fontawesome-free-5.7.2-web/css/all.min.css";
-                }
-                break;
-            }
-        }
-        
-        self::$data["js"]  = array_merge($js,self::$data["js"]);
-        self::$data["css"] = array_merge($css,self::$data["css"]);
-    }
-    
-    /**
      * Remove arquivos css/js duplicados
      */
     public static function removeDuplicates(){
@@ -185,6 +153,7 @@ class Page {
     
     public static function cssTags(){
         $lines = array();
+        
         foreach(Page::css() AS $uri){
             if(is_array($uri)){
                 $attrs = array();
