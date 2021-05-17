@@ -18,7 +18,7 @@ use zion\utils\StringUtils;
  * pela classe (Cookie de Sessao)
  */
 class Session {
-    public static $sessionKey = "APP_SESSIONID";
+    public static $sessionKey = "SESSIONID";
     
     /**
      * Tempo para expirar a sessão em segundos
@@ -136,7 +136,8 @@ class Session {
         // cookie de sessão, não expira no frontend!
         setcookie(self::$sessionKey,$id);
         
-        self::$id = $id;
+        self::$id   = $id;
+        self::$data = [];
         self::$info = self::createInfo();
     }
     
@@ -195,7 +196,13 @@ class Session {
         
         // verifica se a sessão expirou
         if(self::$info["expire"] < new DateTime()){
+            // limpando dados
             self::$data = array();
+            
+            // deletando arquivo
+            if(FileUtils::canDelete($file)){
+                unlink($file);
+            }
         }
     }
     
