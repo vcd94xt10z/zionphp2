@@ -2,7 +2,7 @@
 namespace zion\core;
 
 /**
- * @author Vinicius
+ * @author Vinicius 
  */
 class Page {
     /**
