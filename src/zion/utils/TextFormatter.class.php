@@ -194,7 +194,7 @@ class TextFormatter {
         return preg_replace("/[^a-zA-Z0-9\/:@\.\+-s]/", "", $email, -1, $the_count);
     }
     
-    public static function parse(string $type,$value,$emptyNull=false){
+    public static function parse(string $type,$value,$emptyNull=false,$maxLength=0){
         if($emptyNull AND $value == ""){
             $value = null;
         }
@@ -240,6 +240,13 @@ class TextFormatter {
                 $output = (string)$value;
                 break;
         }
+        
+        if($maxLength > 0){
+            if(sizeof($output) > $maxLength){
+                $output = substr($output,0,$maxLength);
+            }
+        }
+        
         return $output;
     }
     
