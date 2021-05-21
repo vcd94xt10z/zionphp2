@@ -13,6 +13,7 @@ class PDO extends \PDO {
     public static $enableSQLHistory = false;
     public static $enableSQLLog     = false;
     public static $sqlHistory       = array();
+    public $lastSQL = "";
     
     public function __construct($dsn, $username, $passwd, array $options){
         parent::__construct($dsn,$username,$passwd,$options);
@@ -20,6 +21,7 @@ class PDO extends \PDO {
     }
     
     public function prepare($statement,$driver_options = array()){
+        $this->lastSQL = $statement;
         System::set("pdo-lastsql",$statement);
         $this->sendToLog($statement);
         return parent::prepare($statement,$driver_options);
@@ -34,6 +36,7 @@ class PDO extends \PDO {
 		    System::add("pdo-query",$sql);
 		}
 		
+		$this->lastSQL = $sql;
 		System::set("pdo-lastsql",$sql);
 		
 		TimeCounter::start("query");
@@ -77,6 +80,7 @@ class PDO extends \PDO {
 		    System::add("pdo-exec",$sql);
 		}
 		
+		$this->lastSQL = $sql;
 		System::set("pdo-lastsql",$sql);
 		
 		TimeCounter::start("exec");

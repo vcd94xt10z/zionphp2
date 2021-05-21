@@ -150,28 +150,35 @@ class TextFormatter {
      * @param string $text {A = Alpha, N = Numeric, S = Special}
      * @param string $type 
      */
-    public static function filterString($text,$type){
+    public static function filterString($text,$type,$maxLength=0){
+        $output = "";
         if($type == "ANS"){
-            return preg_replace("/[^a-zA-Z0-9\s\@\*\#\_\-\.\, ]/","", $text);
+            $output = preg_replace("/[^a-zA-Z0-9\s\@\*\#\_\-\.\, ]/","", $text);
         }
         
         if($type == "AN"){
-            return preg_replace("/[^a-zA-Z0-9\s\. ]/","", $text);
+            $output = preg_replace("/[^a-zA-Z0-9\s\. ]/","", $text);
         }
         
         if($type == "AS"){
-            return preg_replace("/[^a-zA-Z\s\. ]/","", $text);
+            $output = preg_replace("/[^a-zA-Z\s\. ]/","", $text);
         }
         
         if($type == "A"){
-            return preg_replace("/[^a-zA-Z\s\. ]/","", $text);
+            $output = preg_replace("/[^a-zA-Z\s\. ]/","", $text);
         }
         
         if($type == "N"){
-            return preg_replace("/[^0-9]/","", $text);
+            $output = preg_replace("/[^0-9]/","", $text);
         }
         
-        return $text; 
+        if($maxLength > 0){
+            if(strlen($output) > $maxLength){
+                $output = substr($output,0,$maxLength);
+            }
+        }
+        
+        return $output; 
     }
     
     /**
@@ -194,7 +201,7 @@ class TextFormatter {
         return preg_replace("/[^a-zA-Z0-9\/:@\.\+-s]/", "", $email, -1, $the_count);
     }
     
-    public static function parse(string $type,$value,$emptyNull=false,$maxLength=0){
+    public static function parse(string $type,$value,$emptyNull=false){
         if($emptyNull AND $value == ""){
             $value = null;
         }
@@ -239,12 +246,6 @@ class TextFormatter {
             default:
                 $output = (string)$value;
                 break;
-        }
-        
-        if($maxLength > 0){
-            if(sizeof($output) > $maxLength){
-                $output = substr($output,0,$maxLength);
-            }
         }
         
         return $output;
