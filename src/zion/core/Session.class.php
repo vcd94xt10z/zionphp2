@@ -35,10 +35,6 @@ class Session {
     
     private static $folder      = "/tmp/";
     
-    public static function configure(){
-        self::$folder = \zion\APP_ROOT."tmp".\DS."session".\DS;
-    }
-    
     /**
      * Retorna o id da sessão
      * @return string
@@ -103,17 +99,15 @@ class Session {
             return;
         }
         
+        self::$folder = \zion\APP_ROOT."tmp".\DS."session".\DS;
+        
         if(self::$id == null){
             self::$id = $_COOKIE[self::$sessionKey];
         }
         
-        // se a requisição não tem cookie, não carrega nada
-        if(!self::hasValidCookie()){
-            return;
+        if(self::hasValidCookie()){
+            self::load();
         }
-        
-        // carregando sessão
-        self::load();
         
         self::$initialized = true;
     }
@@ -137,7 +131,9 @@ class Session {
         }
         
         // cookie de sessão
-        setcookie(self::$sessionKey,$id,0,"/",".".$_SERVER["SERVER_NAME"],false,false);
+        //$domain = ".".$_SERVER["SERVER_NAME"];
+        $domain = "";
+        setcookie(self::$sessionKey,$id,0,"/",$domain,false,false);
         
         self::$id   = $id;
         self::$data = [];
