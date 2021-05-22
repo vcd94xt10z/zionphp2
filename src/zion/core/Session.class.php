@@ -210,10 +210,6 @@ class Session {
      * @throws Exception
      */
     private static function write(){
-        if(!self::hasValidCookie()){
-            return;
-        }
-        
         $content = array(
             "data" => self::$data,
             "info" => self::$info
