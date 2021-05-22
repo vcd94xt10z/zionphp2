@@ -1,6 +1,7 @@
 <?php
 namespace zion\orm;
 
+use StdClass;
 use DateTime;
 use zion\utils\TextFormatter;
 
@@ -213,6 +214,14 @@ class ObjectVO {
         if($value === null){
             $this->set($key,array());
         }
+    }
+    
+    public function toStdClass(){
+        $obj = new StdClass();
+        foreach($this->data AS $key => $value){
+            $obj->$key = $value;
+        }
+        return $obj;
     }
     
     public function toArray($fields = array()) : array {
