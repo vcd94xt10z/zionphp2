@@ -103,13 +103,16 @@ class Session {
             return;
         }
         
+        if(self::$id == null){
+            self::$id = $_COOKIE[self::$sessionKey];
+        }
+        
         // se a requisição não tem cookie, não carrega nada
         if(!self::hasValidCookie()){
             return;
         }
         
         // carregando sessão
-        self::$id = $_COOKIE[self::$sessionKey];
         self::load();
         
         self::$initialized = true;
@@ -133,8 +136,8 @@ class Session {
             $id = md5(uniqid("server1",true).rand(100000,999999));
         }
         
-        // cookie de sessão, não expira no frontend!
-        setcookie(self::$sessionKey,$id);
+        // cookie de sessão
+        setcookie(self::$sessionKey,$id,0,"/",".".$_SERVER["SERVER_NAME"],false,false);
         
         self::$id   = $id;
         self::$data = [];
