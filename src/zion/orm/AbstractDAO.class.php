@@ -827,6 +827,7 @@ abstract class AbstractDAO {
 	
 	/**
 	 * Atualiza um campo na tabela
+	 * Atenção! Fazer tratamento do tipo do campo value, exemplo se for objeto DateTime
 	 * @param $db
 	 * @param $field
 	 * @param $value
