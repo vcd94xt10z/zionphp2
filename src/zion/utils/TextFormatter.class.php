@@ -152,26 +152,47 @@ class TextFormatter {
      */
     public static function filterString($text,$type,$maxLength=0){
         $output = "";
+        
+        $alpha   = "\p{L}\.\s ";
+        $number  = "\p{N}";
+        $special = "\@\*\#\_\-\,";
+        
+        // texto, numero e especial
         if($type == "ANS"){
-            $output = preg_replace("/[^a-zA-Z0-9\s\@\*\#\_\-\.\, ]/","", $text);
+            $output = preg_replace("/[^".$alpha.$number.$special."]/u","", $text);
         }
         
+        // texto e numero
         if($type == "AN"){
-            $output = preg_replace("/[^a-zA-Z0-9\s\. ]/","", $text);
+            $output = preg_replace("/[^".$alpha.$number."]/u","", $text);
         }
         
+        // texto e especial
         if($type == "AS"){
-            $output = preg_replace("/[^a-zA-Z\s\. ]/","", $text);
+            $output = preg_replace("/[^".$alpha.$special."]/u","", $text);
         }
         
+        // numero e especial
+        if($type == "NS"){
+            $output = preg_replace("/[^".$number.$special."]/u","", $text);
+        }
+        
+        // texto
         if($type == "A"){
-            $output = preg_replace("/[^a-zA-Z\s\. ]/","", $text);
+            $output = preg_replace("/[^".$alpha."]/u","", $text);
         }
         
+        // numero
         if($type == "N"){
-            $output = preg_replace("/[^0-9]/","", $text);
+            $output = preg_replace("/[^".$number."]/u","", $text);
         }
         
+        // especial
+        if($type == "S"){
+            $output = preg_replace("/[^".$special."]/u","", $text);
+        }
+        
+        // limitador
         if($maxLength > 0){
             if(strlen($output) > $maxLength){
                 $output = substr($output,0,$maxLength);
