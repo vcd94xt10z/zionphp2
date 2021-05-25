@@ -153,7 +153,7 @@ class TextFormatter {
     public static function filterString($text,$type,$maxLength=0){
         $output = "";
         
-        $alpha   = "\p{L}\.\s ";
+        $alpha   = "\p{L}\.\s\_\- ";
         $number  = "\p{N}";
         $special = "\@\*\#\_\-\,";
         
