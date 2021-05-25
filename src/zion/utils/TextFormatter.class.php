@@ -155,7 +155,7 @@ class TextFormatter {
         
         $alpha   = "\p{L}\.\s\_\- ";
         $number  = "\p{N}";
-        $special = "\@\*\#\_\-\,";
+        $special = "\@\*\#\_\-\,\/";
         
         // texto, numero e especial
         if($type == "ANS"){
