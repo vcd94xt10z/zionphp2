@@ -77,6 +77,10 @@ class Session {
         self::write();
     }
     
+    public static function hasData(){
+        return (sizeof(self::$data) > 0);
+    }
+    
     public static function hasValidCookie(){
         return array_key_exists(self::$sessionKey,$_COOKIE) AND $_COOKIE[self::$sessionKey] != "";
     }
@@ -125,18 +129,28 @@ class Session {
     }
     
     public static function createSession($id = null){
-        // criando sessão
+        // se o cookie de sessão já esta no navegador, reutiliza o id
+        if($_COOKIE[self::$sessionKey] != ""){
+            self::$id = $_COOKIE[self::$sessionKey];
+            if(sizeof(self::$info) <= 0){
+                self::$info = self::createInfo();
+            }
+            return;
+        }
+        
+        // gerando id de sessão
         if($id == null){
             $id = md5(uniqid("server1",true).rand(100000,999999));
         }
         
-        // cookie de sessão
+        // enviando instrução para criar o cookie no cabeçalho da resposta
+        // lembrando que cookies de sessão são eliminados ao sair do navegador
         //$domain = ".".$_SERVER["SERVER_NAME"];
         $domain = "";
         setcookie(self::$sessionKey,$id,0,"/",$domain,false,false);
         
+        // definindo id e inicializando sessão
         self::$id   = $id;
-        self::$data = [];
         self::$info = self::createInfo();
     }
     
