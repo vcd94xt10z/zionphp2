@@ -15,6 +15,8 @@ class System {
 	// armazena variáveis globais no sistema
 	public static $data = array();
 	
+	private static $connection = null; 
+	
 	public static function configure(){
 	    // configurações do aplicativo
 	    $all = zion_get_config_all();
@@ -246,12 +248,19 @@ class System {
 	    }
 	}
 	
+	public static function getConnection(string $configKey = 'database'){
+	    if(self::$connection == null){
+	        self::$connection = self::createConnection($configKey);
+	    }
+	    return self::$connection;
+	}
+	
 	/**
 	 * Retorna uma nova conexão com o banco de dados
 	 * @param string $exclusive
 	 * @throws \Exception
 	 */
-	public static function getConnection(string $configKey = 'database'){
+	public static function createConnection(string $configKey = 'database'){
 	    $config = System::get($configKey);
 	    if($config == null){
 	        http_response_code(500);
