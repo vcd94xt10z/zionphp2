@@ -150,19 +150,19 @@ class Zion {
                 $acl = ACL::getObject();
                 if($acl === null){
                     HTTPUtils::status(403);
-                    HTTPUtils::template(403,"Acesso negado, erro em verificar regras de acesso");
+                    echo "Acesso negado, erro em verificar regras de acesso";
                     exit();
                 }
                 
                 if($acl->get("status") == "SOL"){
                     HTTPUtils::status(403);
-                    HTTPUtils::template(403,"Acesso negado, sua solicitação já foi registrada para análise");
+                    echo "Acesso negado, sua solicitação já foi registrada para análise";
                     exit();
                 }
                 
                 if($acl->get("status") == "NEG"){
                     HTTPUtils::status(403);
-                    HTTPUtils::template(403,"Acesso negado, sua solicitado foi bloqueada pela administração do sistema");
+                    echo "Acesso negado, sua solicitado foi bloqueada pela administração do sistema";
                     exit();
                 }
             }
@@ -225,7 +225,7 @@ class Zion {
             
             if(sizeof($uri) < 6) {
                 HTTPUtils::status(404);
-                HTTPUtils::template(404);
+                echo "Página não encontrada";
                 exit();
             }
             
@@ -245,7 +245,7 @@ class Zion {
                 }
                 
                 HTTPUtils::status(404);
-                HTTPUtils::template(404);
+                echo "Página não encontrada";
                 exit();
             }else{
                 // padrão de controle
@@ -276,7 +276,7 @@ class Zion {
         // sempre ficam disponíveis!
         if($zionuriEnabled){
             HTTPUtils::status(404);
-            HTTPUtils::template(404);
+            echo "Página não encontrada";
             exit();
         }
     }
@@ -287,7 +287,7 @@ class Zion {
             $user = Session::get("user");
             if($user == null){
                 HTTPUtils::status(401);
-                HTTPUtils::template(401);
+                echo "Autenticação requerida";
                 exit();
             }
         }

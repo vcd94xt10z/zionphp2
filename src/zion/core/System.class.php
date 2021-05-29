@@ -137,7 +137,7 @@ class System {
 	            .$minFreePercent."%, contate o administrador";
 	            
 	            HTTPUtils::status(507);
-	            HTTPUtils::template(507,$message);
+	            echo $message;
 	            exit();
 	    }
 	    
@@ -150,7 +150,7 @@ class System {
 	            .$minFreePercent."%, contate o administrador";
 	            
 	            HTTPUtils::status(507);
-	            HTTPUtils::template(507,$message);
+	            echo $message;
 	            exit();
 	    }
 	}

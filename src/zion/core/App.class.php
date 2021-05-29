@@ -27,7 +27,7 @@ class App {
                 }
                 
                 HTTPUtils::status(404);
-                HTTPUtils::template(404);
+                echo "Página não encontrada";
                 exit();
             }
             
