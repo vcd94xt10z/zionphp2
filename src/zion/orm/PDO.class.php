@@ -129,17 +129,5 @@ class PDO extends \PDO {
 	    fwrite($f,$sql."\n");
 	    fclose($f);
 	}
-	
-	public function commit(){
-		$this->exec("COMMIT");
-	}
-	
-	public function rollback(){
-		$this->exec("ROLLBACK");		
-	}
-	
-	public function startTransaction(){
-		$this->exec("BEGIN");
-	}
 }
 ?>
