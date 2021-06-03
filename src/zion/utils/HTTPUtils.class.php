@@ -2,6 +2,7 @@
 namespace zion\utils;
 
 use Exception;
+use StdClass;
 use zion\core\System;
 
 /**
@@ -77,7 +78,7 @@ class HTTPUtils {
         return $cacheControl;
     }
     
-    public static function curl2($url, $method = "GET", $data = null, $options = null, &$curlInfo = null) {
+    public static function curl2($url, $method = "GET", $data = null, $options = null) {
         if (!function_exists("curl_init")) {
             throw new Exception("A biblioteca curl não esta disponível", -1);
         }
@@ -216,12 +217,13 @@ class HTTPUtils {
             $headers[] = $request;
         }
         
-        return array(
-            "headersRaw"  => $headersRaw,
-            "headers"     => $headers,
-            "lastHeaders" => $lastHeaders,
-            "body"        => $body
-        );
+        $obj = new StdClass();
+        $obj->headersRaw  = $headersRaw;
+        $obj->headers     = $headers;
+        $obj->lastHeaders = $lastHeaders;
+        $obj->body        = $body;
+        $obj->curlInfo    = $curlInfo;
+        return $obj;
     }
     
     public static function curl($url, $method, $data = null, $options = null, &$curlInfo=null){
