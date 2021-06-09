@@ -323,6 +323,13 @@ class TextFormatter {
         return $output;
     }
     
+    public static function formatCPFCNPJ($num){
+        if(strlen($num) == 11){
+            return self::formatCPF($num);
+        }
+        return self::formatCNPJ($num);
+    }
+    
     public static function formatCPF($num){
         $num = preg_replace("/[^0-9]/",'',$num);
         $num = self::cutfill($num,11,"0");
