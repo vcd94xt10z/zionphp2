@@ -610,10 +610,16 @@ abstract class AbstractDAO {
 	    // validações
 	    $UKs = array();
 	    $PKs = array();
+	    $checkDuplicatedPK = true;
 	    foreach ($this->metadata AS $fieldName => $md) {
 	        // verificando se os campos obrigatórios foram informados
-	        if($md->isRequired && $obj->get($fieldName) === null){
+	        if($md->isRequired && !$md->isPK && $obj->get($fieldName) === null){
 	            throw new Exception("O campo \"{$fieldName}\" da tabela \"{$this->tableName}\" é obrigatório");
+	        }
+	        
+	        // campo auto increment
+	        if($md->isRequired && $md->isPK && $obj->get($fieldName) === null){
+	           $checkDuplicatedPK = false;
 	        }
 	        
 	        // coletando chaves
@@ -627,7 +633,7 @@ abstract class AbstractDAO {
 	    }
 	    
 	    // verificando se a chave primária esta duplicada
-	    if(sizeof($PKs) > 0){
+	    if($checkDuplicatedPK && sizeof($PKs) > 0){
 	        $filter = new Filter();
 	        foreach($PKs AS $pk){
 	            $filter->eq($pk,$obj->get($pk));
