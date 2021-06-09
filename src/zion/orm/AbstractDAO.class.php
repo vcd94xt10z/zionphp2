@@ -885,11 +885,22 @@ abstract class AbstractDAO {
 	 * @return string
 	 */
 	public function delete(PDO $db,$arg1) : int {
-	    $sql = "DELETE FROM ".$this->addDelimiters($this->tableName);
-	    $sql .= $this->parseAnyFilter($arg1);
-	    if($sql == ""){
+	    $sql2 = $this->parseAnyFilter($arg1);
+	    if($sql2 == ""){
 	        throw new Exception("DELETE sem filtro informado");
 	    }
+	    
+	    $sql  = "DELETE FROM ".$this->addDelimiters($this->tableName);
+	    $sql .= $sql2;
+	    return $this->exec($db,$sql);
+	}
+	
+	public function delete2(PDO $db,$sql,$arg1) : int {
+	    $sql2 = $this->parseAnyFilter($arg1);
+	    if($sql2 == ""){
+	        throw new Exception("DELETE sem filtro informado");
+	    }
+	    $sql .= $sql2;
 	    return $this->exec($db,$sql);
 	}
 	
