@@ -13,6 +13,7 @@ class Random {
         $letterMinAcc = 0;
         $letterMaiAcc = 0;
         $specialAcc   = 0;
+        $specialList  = str_split("!@#$%&*()",1);
         
         $total = $lettersMin + $lettersMai + $numbers + $specials;
         if($total <> $length){
@@ -23,7 +24,7 @@ class Random {
             $randNumber    = chr(rand(48,57));  // numeros
             $randLetterMin = chr(rand(97,122)); // letras minusculas
             $randLetterMai = chr(rand(65,90));  // letras maiusculas
-            $randSpecial   = chr(rand(33,47));  // speciais
+            $randSpecial   = $specialList[array_rand($specialList)]; // especiais
             
             if($numberAcc <= $numbers){
                 $password[] = $randNumber;
