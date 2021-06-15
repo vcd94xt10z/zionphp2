@@ -130,7 +130,7 @@
         {
             $codeArr = array();
             
-            $codeLines = explode("\n", gzuncompress($code));
+            $codeLines = explode("\n", @gzuncompress($code));
             foreach ($codeLines as $line)
                 $codeArr[] = str_split($line);
             
