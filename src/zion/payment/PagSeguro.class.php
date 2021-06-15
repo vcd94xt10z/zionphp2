@@ -218,7 +218,7 @@ class PagSeguro {
         $data[] = "senderPhone=".urlencode($senderPhoneNumber);
         $data[] = "senderEmail=".urlencode($senderEmail);
         $data[] = "shippingAddressStreet=".urlencode($addr->get("address"));
-        $data[] = "shippingAddressNumber=".urlencode($addr->get("addr_number"));
+        $data[] = "shippingAddressNumber=".urlencode($addr->get("number"));
         $data[] = "shippingAddressComplement=".urlencode($addr->get("complement"));
         $data[] = "shippingAddressDistrict=".urlencode($addr->get("neighborhood"));
         $data[] = "shippingAddressPostalCode=".urlencode($addr->get("zipcode"));
@@ -409,7 +409,7 @@ class PagSeguro {
                 </holder>
                 <billingAddress>
                     <street>".$deliveryAddr->get("address")."</street>
-                    <number>".$deliveryAddr->get("addr_number")."</number>
+                    <number>".$deliveryAddr->get("number")."</number>
                     <complement>".$deliveryAddr->get("complement")."</complement>
                     <district>".$deliveryAddr->get("neighborhood")."</district>
                     <city>".$deliveryAddr->get("city")."</city>
