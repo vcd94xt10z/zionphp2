@@ -93,11 +93,11 @@ function zionphp_autoload($className) {
     
     // PHPMailer
     if(strpos($className,"PHPMailer") === 0){
-        require(\zion\ROOT."src\PHPMailer-master\PHPMailer\Exception.php");
-        require(\zion\ROOT."src\PHPMailer-master\PHPMailer\SMTP.php");
-        require(\zion\ROOT."src\PHPMailer-master\PHPMailer\POP3.php");
-        require(\zion\ROOT."src\PHPMailer-master\PHPMailer\OAuth.php");
-        require(\zion\ROOT."src\PHPMailer-master\PHPMailer\PHPMailer.php");
+        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/Exception.php");
+        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/SMTP.php");
+        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/POP3.php");
+        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/OAuth.php");
+        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/PHPMailer.php");
     }
     
     return false;
