@@ -354,6 +354,27 @@ class TextFormatter {
         return mb_substr($num,0,2).".".mb_substr($num,2,3).".".mb_substr($num,5,3)."/".mb_substr($num,8,4)."-".mb_substr($num,12,2);
     }
     
+    public static function formatDate($obj,$format=null){
+        if($obj == null){
+            return "";
+        }
+        if($format == null){
+            $format = System::get("dateFormat");
+        }
+        
+        return $obj->format($format);
+    }
+    
+    public static function formatDateTime($obj,$format=null){
+        if($obj == null){
+            return "";
+        }
+        if($format == null){
+            $format = System::get("dateTimeFormat");
+        }
+        return $obj->format($format);
+    }
+    
     public static function formatCurrency($value){
         return number_format($value,System::get("currencyDecimalPlaces"),System::get("currencyDecimalSep"),System::get("currencyThousandSep"));
     }
