@@ -117,7 +117,7 @@ function zion_unserialize_callback_func($className){
 }
 
 function zion_escape_dbval($val){
-    return mysqli_real_escape_string($val);
+    return addslashes($val);
 }
 
 function old_count($arg){
