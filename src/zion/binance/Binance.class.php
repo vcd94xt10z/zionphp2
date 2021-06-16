@@ -2,6 +2,9 @@
 namespace zion\binance;
 
 class Binance {
+    public static $btc = null;
+    public static $eth = null;
+    
     public static function curl($url){
         $curl = curl_init();
         
@@ -38,7 +41,7 @@ class Binance {
         return $response;
     }
     
-    public static function getFutureList($symbol="USDT"){
+    public static function getFutureList($symbol="USDT",$limit=10){
         $url = "https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=";
         $list = json_decode(self::curl($url));
         
@@ -47,6 +50,15 @@ class Binance {
             if(strpos($obj->symbol,"USDT") === false){
                continue;
             }
+            
+            if($obj->symbol == "BTCUSDT"){
+                self::$btc = $obj;
+            }
+            
+            if($obj->symbol == "ETHUSDT"){
+                self::$eth = $obj;
+            }
+            
             $list2[] = $obj;
         }
         
@@ -57,8 +69,9 @@ class Binance {
         });
         
         // limitando
-        $list2 = array_slice($list2, 0, 10);
-        
+        if(count($list2) > $limit){
+            $list2 = array_slice($list2, 0, $limit);
+        }
         return $list2;
     }
     
