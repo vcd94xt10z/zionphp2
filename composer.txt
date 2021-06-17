@@ -1,0 +1,1 @@
+composer require "mercadopago/dx-php:2.3.0"
