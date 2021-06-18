@@ -3,86 +3,123 @@ namespace zion\payment;
 
 use Exception;
 use StdClass;
-use DateTime;
 use zion\orm\ObjectVO;
-use zion\core\System;
 
 /**
  * @author Vinicius
  * @since 17/06/21
  */
 class MercadoPago {
-    public function testPIX($token){
-        $obj = new ObjectVO();
-        $obj->set("value",10.00);
-        $obj->set("description","Pedido 1");
-        
-        $cus = new ObjectVO();
-        $cus->set("email","");
-        $cus->set("name","");
-        $cus->set("docftype","CPF");
-        $cus->set("docf","");
-        
-        $addr = new ObjectVO();
-        $addr->set("zipcode","");
-        $addr->set("address","");
-        $addr->set("number","");
-        $addr->set("neighborhood","");
-        $addr->set("city","");
-        $addr->set("state","");
-        
-        $cus->set("address",$addr);
-        $obj->set("customer",$cus);
-        
-        $this->solicitarPIX($token, $obj);
+    private $token;
+    
+    private $requestLog     = null;
+    private $requestLogHist = [];
+    
+    public function __construct($token){
+        $this->token = $token;
     }
     
-    /**
-     * https://www.mercadopago.com.br/developers/pt/guides/online-payments/checkout-api/other-payment-ways
-     */
-    public function solicitarPIX($token, $obj){
-        $customer = $obj->get("customer");
-        $address  = $customer->get("address");
+    public function newPix(){
+        $obj = new StdClass();
+        $obj->transaction_amount = 0;
+        $obj->description        = "";
+        $obj->payment_method_id  = "pix";
         
-        $names  = explode(" ",$customer->get("name"));
-        $index  = sizeof($names) - 1;
+        $obj->payer = new StdClass();
+        $obj->payer->email      = "test@test.com";
+        $obj->payer->first_name = "Test";
+        $obj->payer->last_name  = "User";
         
-        $firstName = $names[0];
-        $lastName = "";
-        if($index > 0){
-            $lastName = $names[$index];
+        $obj->payer->identification = new StdClass();
+        $obj->payer->identification->type   = "CPF";
+        $obj->payer->identification->number = "";
+        
+        $obj->payer->address = new StdClass();
+        $obj->payer->address->zip_code      = "";
+        $obj->payer->address->street_name   = "";
+        $obj->payer->address->street_number = "";
+        $obj->payer->address->neighborhood  = "";
+        $obj->payer->address->city          = "";
+        $obj->payer->address->federal_unit  = "";
+        return $obj;
+    }
+    
+    public function pix($obj){
+        if($obj == null){
+            throw new Exception("Objeto PIX null");
         }
         
-        if(ini_get("curl.cainfo") == ""){
-            // verificar se é necessário informar
-        }
+        $url = "https://api.mercadopago.com/v1/payments";
         
-        \MercadoPago\SDK::setAccessToken($token);
+        $headerList = [
+            "Accept: application/json",
+            "Authorization: Bearer ".$this->token,
+            "Content-Type: application/json"
+        ];
         
-        $payment = new \MercadoPago\Payment();
-        $payment->transaction_amount = $obj->get("value");
-        $payment->description = $obj->get("description");
-        $payment->payment_method_id = "pix";
-        $payment->payer = array(
-            "email" => $customer->get("email"),
-            "first_name" => $firstName,
-            "last_name" => $lastName,
-            "identification" => array(
-                "type" => $customer->get("docftype"),
-                "number" => $customer->get("docf")
-            ),
-            "address"=>  array(
-                "zip_code" => $address->get("zipcode"),
-                "street_name" => $address->get("address"),
-                "street_number" => $address->get("number"),
-                "neighborhood" => $address->get("neighborhood"),
-                "city" => $address->get("city"),
-                "federal_unit" => $address->get("state")
-            )
+        $body = json_encode($obj);
+        
+        $ret = $this->curl($url,"POST",$headerList,$body);
+        return $ret;
+    }
+    
+    public function curl($url,$method="GET",$headers=[],$postDataString=""){
+        $curl = curl_init();
+        
+        $options = array(
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => $method,
+            CURLOPT_HTTPHEADER     => $headers,
         );
         
-        $ret = $payment->save();
-        var_dump($ret);exit();
+        if($postDataString != ""){
+            $options[CURLOPT_POSTFIELDS] = $postDataString;
+        }
+        
+        curl_setopt_array($curl, $options);
+        
+        $log = new ObjectVO();
+        $log->set("req_url",$url);
+        $log->set("req_method",$method);
+        $log->set("req_headers",$headers);
+        $log->set("req_body",$postDataString);
+        
+        $response = @curl_exec($curl);
+        $curlInfo = curl_getinfo($curl);
+        
+        if($response === false){
+            $curlError = curl_error($curl);
+            
+            $log->set("curl_error",$curlError);
+            $this->requestLog[] = $log;
+            
+            curl_close($curl);
+            throw new Exception("Erro ao conectar no endereço '".$url."': ".$curlError);
+        }
+        curl_close($curl);
+        
+        $log->set("res_status",$curlInfo["http_code"]);
+        $log->set("res_body",$response);
+        
+        $this->requestLog       = $log;
+        $this->requestLogHist[] = $log;
+        
+        $result = new StdClass();
+        $result->responseBody = $response;
+        $result->curlInfo = $curlInfo;
+        return $result;
+    }
+    
+    public function getLastRequestLog(){
+        return $this->requestLog;
     }
 }
 ?>
