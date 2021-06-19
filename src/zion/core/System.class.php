@@ -17,6 +17,12 @@ class System {
 	
 	private static $connection = null; 
 	
+	public static function enableErrorHandler($showErrors=false){
+		set_error_handler("zion\core\ErrorHandler::handleError",E_ALL);
+	    set_exception_handler("zion\core\ErrorHandler::handleException");
+		\zion\core\ErrorHandler::$showErrors = $showErrors;
+	}
+
 	public static function configure(){
 	    // configurações do aplicativo
 	    $all = zion_get_config_all();
