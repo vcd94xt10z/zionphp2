@@ -385,7 +385,7 @@ class TextFormatter {
         }
         
         // removendo caracteres que não fazem parte do preço
-        $regexp = "/[^0-9\\".$decimalSep."\\".$thousandSep."]/";
+        $regexp = "/[^0-9\\".$decimalSep."\\".$thousandSep."\-]/";
         $value = preg_replace($regexp,"",trim($value));
         if(mb_strlen($value) <= 0){
             return 0.0;
