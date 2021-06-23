@@ -1,6 +1,8 @@
 <?php
 namespace zion\binance;
 
+use Exception;
+
 class Binance {
     public static $btc = null;
     public static $eth = null;
@@ -28,8 +30,9 @@ class Binance {
         $curlInfo = curl_getinfo($curl);
         
         if($response === false){
+            $error = curl_error($curl);
             curl_close($curl);
-            throw new Exception("Erro ao conectar no endereço: ".curl_error($curl));
+            throw new Exception("Erro ao conectar no endereço ".$url.": ".$error);
         }
         
         if($curlInfo["http_code"] != 200){
