@@ -87,7 +87,7 @@ class ErrorHandler {
 		
 		http_response_code(500);
 		HTTPUtils::sendHeadersNoCache();
-		echo $errstr;
+		echo "[".$type_str."](".$errno.") ".$errstr." ".$errfile.":".$errline;
 		
 		// colocando exit porque senão o php pode continuar executando a página
 		// depois do erro (tipo um warning) e passando novamente neste método
