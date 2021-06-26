@@ -5,48 +5,11 @@ use Exception;
 use StdClass;
 
 class Binance {
-    public static function curl($url){
-        $curl = curl_init();
-        
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_SSL_VERIFYHOST => false,
-          CURLOPT_SSL_VERIFYPEER => false,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'GET',
-          CURLOPT_HTTPHEADER => array(
-            'Content-Type: application/json'
-          ),
-        ));
-        
-        $response = curl_exec($curl);
-        $curlInfo = curl_getinfo($curl);
-        
-        if($response === false){
-            $error = curl_error($curl);
-            curl_close($curl);
-            throw new Exception("Erro ao conectar no endereço ".$url.": ".$error);
-        }
-        
-        if($curlInfo["http_code"] != 200){
-            curl_close($curl);
-            throw new Exception("Erro ao conectar no endereço, status ".$curlInfo["http_code"]);
-        }
-        
-        curl_close($curl);
-        return $response;
-    }
-
     public static function getFutureSymbolInfo($symbol="ETHUSDT"){
         if($symbol == ""){
             return null;
         }
-        $url = "https://fapi.binance.com/api/v1/ticker/24hr?symbol=".$symbol;
+        $url = "https://api.binance.com/api/v1/ticker/24hr?symbol=".$symbol;
         $obj = json_decode(self::curl($url));
         return $obj;
     }
@@ -116,5 +79,42 @@ class Binance {
         
         $url = "https://wirepusher.com/send?id=".$token."&title=".$title."&message=".$message."&type=".$type;
         self::curl($url);
+    }
+
+    public static function curl($url){
+        $curl = curl_init();
+        
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_SSL_VERIFYHOST => false,
+          CURLOPT_SSL_VERIFYPEER => false,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'GET',
+          CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json'
+          ),
+        ));
+        
+        $response = curl_exec($curl);
+        $curlInfo = curl_getinfo($curl);
+        
+        if($response === false){
+            $error = curl_error($curl);
+            curl_close($curl);
+            throw new Exception("Erro ao conectar no endereço ".$url.": ".$error);
+        }
+        
+        if($curlInfo["http_code"] != 200){
+            curl_close($curl);
+            throw new Exception("Erro ao conectar no endereço, status ".$curlInfo["http_code"]);
+        }
+        
+        curl_close($curl);
+        return $response;
     }
 }
