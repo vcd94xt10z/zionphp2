@@ -43,6 +43,15 @@ class Binance {
         curl_close($curl);
         return $response;
     }
+
+    public static function getSymbolInfo($symbol="ETHUSDT"){
+        if($symbol == ""){
+            return null;
+        }
+        $url = "https://api.binance.com/api/v1/ticker/24hr?symbol=".$symbol;
+        $obj = json_decode(self::curl($url));
+        return $obj;
+    }
     
     public static function getFutureList($symbol="USDT",$limit=10){
         $url = "https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=";
