@@ -2,11 +2,9 @@
 namespace zion\binance;
 
 use Exception;
+use StdClass;
 
 class Binance {
-    public static $btc = null;
-    public static $eth = null;
-    
     public static function curl($url){
         $curl = curl_init();
         
@@ -44,7 +42,16 @@ class Binance {
         return $response;
     }
 
-    public static function getSymbolInfo($symbol="ETHUSDT"){
+    public static function getFutureSymbolInfo($symbol="ETHUSDT"){
+        if($symbol == ""){
+            return null;
+        }
+        $url = "https://fapi.binance.com/api/v1/ticker/24hr?symbol=".$symbol;
+        $obj = json_decode(self::curl($url));
+        return $obj;
+    }
+
+    public static function getSpotList($symbol=""){
         if($symbol == ""){
             return null;
         }
@@ -52,23 +59,37 @@ class Binance {
         $obj = json_decode(self::curl($url));
         return $obj;
     }
-    
-    public static function getFutureList($symbol="USDT",$limit=10){
-        $url = "https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=";
+
+    public static function getFutureList($symbol="",$limit=10){
+        $url = "https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=".$symbol;
         $list = json_decode(self::curl($url));
         
+        $output = new StdClass();
+        $output->negativeCount = 0;
+        $output->positiveCount = 0;
+        $output->BTC = null;
+        $output->ETH = null;
+        $output->list = [];
+
         $list2 = [];
         foreach($list AS $obj){
             if(strpos($obj->symbol,"USDT") === false){
                continue;
             }
+
+            if($obj->priceChangePercent < 0){
+                $output->negativeCount++;
+            }
+            if($obj->priceChangePercent >= 0){
+                $output->positiveCount++;
+            }
             
             if($obj->symbol == "BTCUSDT"){
-                self::$btc = $obj;
+                $output->BTC = $obj;
             }
             
             if($obj->symbol == "ETHUSDT"){
-                self::$eth = $obj;
+                $output->ETH = $obj;
             }
             
             $list2[] = $obj;
@@ -84,7 +105,9 @@ class Binance {
         if(count($list2) > $limit){
             $list2 = array_slice($list2, 0, $limit);
         }
-        return $list2;
+
+        $output->list = $list2;
+        return $output;
     }
     
     public static function notify($token,$title,$message,$type="type1"){
