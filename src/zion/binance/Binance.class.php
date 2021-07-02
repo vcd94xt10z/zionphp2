@@ -65,8 +65,10 @@ class Binance {
         });
         
         // limitando
-        if(count($list2) > $limit){
-            $list2 = array_slice($list2, 0, $limit);
+        if($limit != 0){
+            if(count($list2) > $limit){
+                $list2 = array_slice($list2, 0, $limit);
+            }
         }
 
         $output->list = $list2;
