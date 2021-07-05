@@ -1,0 +1,82 @@
+CREATE TABLE IF NOT EXISTS `zion_waf_request_log` (
+`requestid` int(11) NOT NULL AUTO_INCREMENT,
+`USER` varchar(20) DEFAULT NULL,
+`HOME` varchar(45) DEFAULT NULL,
+`SCRIPT_NAME` varchar(300) DEFAULT NULL,
+`REQUEST_URI` varchar(1024) DEFAULT NULL,
+`QUERY_STRING` varchar(300) DEFAULT NULL,
+`REQUEST_METHOD` varchar(10) DEFAULT NULL,
+`SERVER_PROTOCOL` varchar(45) DEFAULT NULL,
+`GATEWAY_INTERFACE` varchar(45) DEFAULT NULL,
+`REDIRECT_URL` varchar(500) DEFAULT NULL,
+`REMOTE_PORT` varchar(10) DEFAULT NULL,
+`SCRIPT_FILENAME` varchar(1024) DEFAULT NULL,
+`SERVER_ADMIN` varchar(45) DEFAULT NULL,
+`CONTEXT_DOCUMENT_ROOT` varchar(1024) DEFAULT NULL,
+`CONTEXT_PREFIX` varchar(100) DEFAULT NULL,
+`REQUEST_SCHEME` varchar(45) DEFAULT NULL,
+`DOCUMENT_ROOT` varchar(500) DEFAULT NULL,
+`REMOTE_ADDR` varchar(60) DEFAULT NULL,
+`SERVER_PORT` varchar(10) DEFAULT NULL,
+`SERVER_ADDR` varchar(20) DEFAULT NULL,
+`SERVER_NAME` varchar(200) DEFAULT NULL,
+`SERVER_SOFTWARE` varchar(100) DEFAULT NULL,
+`SERVER_SIGNATURE` varchar(100) DEFAULT NULL,
+`PATH` varchar(1024) DEFAULT NULL,
+`HTTP_PRAGMA` varchar(45) DEFAULT NULL,
+`HTTP_COOKIE` varchar(1024) DEFAULT NULL,
+`HTTP_ACCEPT_LANGUAGE` varchar(200) DEFAULT NULL,
+`HTTP_ACCEPT_ENCODING` varchar(200) DEFAULT NULL,
+`HTTP_ACCEPT` varchar(1024) DEFAULT NULL,
+`HTTP_DNT` varchar(10) DEFAULT NULL,
+`HTTP_USER_AGENT` varchar(1024) DEFAULT NULL,
+`HTTP_UPGRADE_INSECURE_REQUESTS` varchar(45) DEFAULT NULL,
+`HTTP_CONNECTION` varchar(45) DEFAULT NULL,
+`HTTP_HOST` varchar(100) DEFAULT NULL,
+`UNIQUE_ID` varchar(45) DEFAULT NULL,
+`REDIRECT_STATUS` varchar(45) DEFAULT NULL,
+`REDIRECT_UNIQUE_ID` varchar(45) DEFAULT NULL,
+`FCGI_ROLE` varchar(45) DEFAULT NULL,
+`PHP_SELF` varchar(100) DEFAULT NULL,
+`REQUEST_TIME_FLOAT` varchar(45) DEFAULT NULL,
+`REQUEST_TIME` datetime DEFAULT NULL,
+`HTTP_REFERER` varchar(1024) DEFAULT NULL,
+`REQUEST_BODY` text DEFAULT NULL,
+PRIMARY KEY (`requestid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `zion_waf_whitelist` (
+`ipaddr` varchar(60) NOT NULL,
+`created` datetime NOT NULL,
+`type` varchar(1) NOT NULL COMMENT 'static - S\ndynamic - D',
+`name` varchar(300) NOT NULL,
+`hits` int(11) NOT NULL DEFAULT 1,
+`updated` datetime,
+PRIMARY KEY (`ipaddr`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `zion_waf_blacklist` (
+`ipaddr` varchar(60) NOT NULL,
+`created` datetime DEFAULT NULL,
+`user_agent` varchar(2048) DEFAULT NULL,
+`request_uri` varchar(2048) DEFAULT NULL,
+`server_name` varchar(2048) DEFAULT NULL,
+`hits` int(11) NOT NULL DEFAULT 1,
+`policy` varchar(100) DEFAULT NULL,
+`updated` datetime,
+PRIMARY KEY (`ipaddr`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `zion_waf_ip_location` (
+`ipaddr` char(60) NOT NULL,
+`type` varchar(10) DEFAULT NULL,
+`continent_code` varchar(5) DEFAULT NULL,
+`continent_name` varchar(20) DEFAULT NULL,
+`country_code` varchar(5) NOT NULL,
+`country_name` varchar(20) DEFAULT NULL,
+`region_code` varchar(5) DEFAULT NULL,
+`region_name` varchar(20) DEFAULT NULL,
+`city` varchar(180) DEFAULT NULL,
+`updated` datetime DEFAULT NULL,
+PRIMARY KEY (`ipaddr`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
