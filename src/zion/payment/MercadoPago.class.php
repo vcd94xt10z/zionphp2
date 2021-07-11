@@ -3,6 +3,8 @@ namespace zion\payment;
 
 use Exception;
 use StdClass;
+use DateTime;
+use zion\core\System;
 use zion\orm\ObjectVO;
 
 /**
@@ -120,6 +122,35 @@ class MercadoPago {
     
     public function getLastRequestLog(){
         return $this->requestLog;
+    }
+
+    public function pixLog($soid,$paymentid){
+        $obj = new ObjectVO();
+        $obj->set("transactionid",null);
+        $obj->set("shopid",\SHOPID);
+        $obj->set("soid",$soid);
+        $obj->set("paymentid",$paymentid);
+        $obj->set("created_at",new DateTime());
+        $obj->set("req_url",$this->requestLog->get("req_url"));
+        $obj->set("req_method",$this->requestLog->get("req_method"));
+        $obj->set("req_body",$this->requestLog->get("req_body"));
+        $obj->set("res_status",$this->requestLog->get("res_status"));
+        $obj->set("res_body",utf8_encode($this->requestLog->get("res_body")));
+        $obj->set("curl_error",$this->requestLog->get("curl_error"));
+        
+        if($obj->get("res_body") != ""){
+            $json = json_decode($obj->get("res_body"));
+            if($json != null){
+                $obj->set("return_pixcode",$json->point_of_interaction->transaction_data->qr_code);
+                $obj->set("return_qrcode",$json->point_of_interaction->transaction_data->qr_code_base64);
+            }
+        }
+        
+        $db = System::getConnection();
+        $dao = System::getDAO($db,"mercadopago_pix");
+        $dao->insert($db,$obj);
+        
+        return $db->lastInsertId();
     }
 }
 ?>

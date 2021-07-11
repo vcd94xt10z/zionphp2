@@ -98,6 +98,14 @@ class PagSeguro {
     public function criarSessao(){
         $url = 'https://'.$this->servername.'/v2/sessions?email='.$this->email.'&token='.$this->token;
         $result = $this->curl($url,"POST");
+
+        if($result->curlInfo["http_code"] == 401){
+            throw new Exception("PagSeguro: Sem autorização, verifique se as credenciais cadastradas estão corretas");
+        }
+
+        if($result->curlInfo["http_code"] == 500){
+            throw new Exception("PagSeguro: Erro em criar sessão");
+        }
         
         $xml = simplexml_load_string($result->responseBody);
         if($xml != null){
