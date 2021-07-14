@@ -19,81 +19,6 @@ use \zion\core\System;
 class Sefaz {
     // configurações para se comunicar com o Sefaz
     private $config = null;
-
-    const MOD_CONHECIMENTO_AEREO            = '10';
-    const MOD_CONHECIMENTO_FERROVIARIO      = '11';
-    const MOD_CONHECIMENTO_FLUVIAL          = '09';
-    const MOD_CONHECIMENTO_RODOVIARIO       = '08';
-    const MOD_NF_MODELO_1_1A                = '01';
-    const MOD_NF_ENERGIA_ELETRICA           = '06';
-    const MOD_NF_ENTRADA                    = '03';
-    const MOD_NF_SERVICO_DE_COMUNICACAO     = '21';
-    const MOD_NF_SERVICO_DE_TELECOMUNICACAO = '22';
-    const MOD_NF_SERVICO_DE_TRANSPORTES     = '07';
-    const MOD_NF_CONSUMO                    = '02';
-    const MOD_NF_PRODUCAO                   = '04';
-    const MOD_NF_MODELO_55                  = '55';
-    const MOD_CTE_MODELO_57                 = '57';
-    const MOD_CTE_MODELO_67                 = '67';
-    const MOD_NFE_PARA_ENERGIA              = '66';
-    const MOD_CUPOM_FISCAL_ELETRONICO       = '65';
-
-    const INDPAG_PAGAMENTO_A_VISTA           = 0;
-    const INDPAG_PAGAMENTO_A_PRAZO           = 1;
-    const INDPAG_OUTROS                      = 2;
-
-    const TPNF_ENTRADA                       = 0;
-    const TPNF_SAIDA                         = 0;
-
-    const IDDEST_OPERACAO_INTERNA            = 1;
-    const IDDEST_OPERACAO_INTERESTADUAL      = 2;
-
-    const TPIMP_SEM_GERACAO_DANFE            = 0;
-    const TPIMP_DANFE_NORMAL_RETRATO         = 1;
-    const TPIMP_DANFE_NORMAL_PAISAGEM        = 2;
-    const TPIMP_DANFE_SIMPLIFICADO           = 3;
-    const TPIMP_DANFE_NFCE                   = 4;
-    const TPIMP_DANFE_NFCE_EM_MSG_ELETRONICA = 5;
-
-    const TPEMIS_EMISSAO_NORMAL      = 1;
-    const TPEMIS_CONTINGENCIA_FS_IA  = 2;
-    const TPEMIS_CONTINGENCIA_SCAN   = 3;
-    const TPEMIS_CONTINGENCIA_DPEC   = 4;
-    const TPEMIS_CONTINGENCIA_FS_DA  = 5;
-    const TPEMIS_CONTINGENCIA_SVC_AN = 6;
-    const TPEMIS_CONTINGENCIA_SVC_RS = 7;
-
-    const TPAMB_PRODUCAO    = 1;
-    const TPAMB_HOMOLOGACAO = 2;
-
-    const FINNFE_NFE_NORMAL              = 1;
-    const FINNFE_NFE_COMPLEMENTAR        = 2;
-    const FINNFE_NFE_DE_AJUSTE           = 3;
-    const FINNFE_DEVOLUCAO_DE_MERCADORIA = 4;
-
-    const INDFINAL_CONSUMIDOR_NORMAL = 0;
-    const INDFINAL_CONSUMIDOR_FINAL  = 1;
-
-    const INDPRES_NAO_SE_APLICA                           = 0;
-    const INDPRES_OPERACAO_PRESENCIAL                     = 1;
-    const INDPRES_OPERACAO_NAO_PRESENCIAL_INTERNET        = 2;
-    const INDPRES_OPERACAO_NAO_PRESENCIAL_TELEATENDIMENTO = 3;
-    const INDPRES_NFCE_OPERACAO_ENTREGA_DOMICILIO         = 4;
-    const INDPRES_OPERACAO_NAO_PRESENCIAL_OUTROS          = 9;
-
-    const PROCEMI_EMISSAO_NFE_APLICATIVO_CONTRIBUINTE = 0;
-    const PROCEMI_EMISSAO_NFE_AVULSA_PELO_FISCO       = 1;
-    const PROCEMI_EMISSAO_NFE_AVULSA_PELO_CONTRIB     = 2;
-    const PROCEMI_EMISSAO_NFE_PELO_CONTRIB_APP_FISCO  = 3;
-
-    const CRT_SIMPLES_NACIONAL                             = 1;
-    const CRT_SIMPLES_NACIONAL_EXCESSO_SUBLIMITE_REC_BRUTA = 2;
-    const CRT_REGIME_NORMAL                                = 3;
-
-    const MODFRETE_POR_CONTA_DO_EMITENTE  = 0;
-    const MODFRETE_POR_CONTA_DO_DEST_REM  = 1;
-    const MODFRETE_POR_CONTA_DE_TERCEIROS = 2;
-    const MODFRETE_SEM_FRETE              = 9;
     
     public function __construct(stdClass $config){
         if($config == null){
@@ -206,35 +131,33 @@ class Sefaz {
      * @return void
      */
     public function getAutorizaObjTestNFCePF(){
-        $obj = new StdClass();
+        $obj = new SefazAutorizacao();
 
         // dados gerais
         $obj->cUF      = 41; // PR
         $obj->cNF      = rand(10000000,99999999); // Código Numérico que compõe a Chave de Acesso da NF-e
         $obj->natOp    = "VENDA";
-        $obj->mod      = Sefaz::MOD_CUPOM_FISCAL_ELETRONICO;
+        $obj->mod      = SefazAutorizacao::MOD_CUPOM_FISCAL_ELETRONICO;
         $obj->cNF      = 10001;   // Número da Nota fiscal
         $obj->serie    = 1;       // Série
-        $obj->indPag   = Sefaz::INDPAG_PAGAMENTO_A_VISTA;
-        $obj->tpNF     = Sefaz::TPNF_SAIDA;
-        $obj->idDest   = Sefaz::IDDEST_OPERACAO_INTERNA;
-        $obj->tpImp    = Sefaz::TPIMP_DANFE_NFCE;
-        $obj->tpEmis   = Sefaz::TPEMIS_EMISSAO_NORMAL;
-        $obj->tpAmb    = Sefaz::TPAMB_HOMOLOGACAO;
-        $obj->finNFe   = Sefaz::FINNFE_NFE_NORMAL;
-        $obj->indFinal = Sefaz::INDFINAL_CONSUMIDOR_FINAL;
-        $obj->indPres  = Sefaz::INDPRES_OPERACAO_PRESENCIAL;
-        $obj->procEmi  = Sefaz::PROCEMI_EMISSAO_NFE_APLICATIVO_CONTRIBUINTE;
+        $obj->indPag   = SefazAutorizacao::INDPAG_PAGAMENTO_A_VISTA;
+        $obj->tpNF     = SefazAutorizacao::TPNF_SAIDA;
+        $obj->idDest   = SefazAutorizacao::IDDEST_OPERACAO_INTERNA;
+        $obj->tpImp    = SefazAutorizacao::TPIMP_DANFE_NFCE;
+        $obj->tpEmis   = SefazAutorizacao::TPEMIS_EMISSAO_NORMAL;
+        $obj->tpAmb    = SefazAutorizacao::TPAMB_HOMOLOGACAO;
+        $obj->finNFe   = SefazAutorizacao::FINNFE_NFE_NORMAL;
+        $obj->indFinal = SefazAutorizacao::INDFINAL_CONSUMIDOR_FINAL;
+        $obj->indPres  = SefazAutorizacao::INDPRES_OPERACAO_PRESENCIAL;
+        $obj->procEmi  = SefazAutorizacao::PROCEMI_EMISSAO_NFE_APLICATIVO_CONTRIBUINTE;
         
         // dados do destinatário
-        $obj->dest       = new StdClass();
+        $obj->dest       = new SefazAutorizacaoDest();
         $obj->dest->nome = "Cliente Teste";
         $obj->dest->CPF  = "";
 
         // produtos
-        $obj->productList = [];
-
-        $prod = new StdClass();
+        $prod = new SefazAutorizacaoProduto();
         $prod->cProd    = '1';
         $prod->xProd    = 'PRODUTO TESTE';
         $prod->NCM      = '39100019';
@@ -253,20 +176,18 @@ class Sefaz {
         $prod->vTotTrib = 16.09;
 
         // ICMS
-        $prod->ICMS = new StdClass();
         $prod->ICMS->CST   = '00';
         $prod->ICMS->modBC = 0;
         $prod->ICMS->vBC   = 16.09;
         $prod->ICMS->pICMS = 18;
         $prod->ICMS->vICMS = 3.04;
 
-        $obj->productList[] = $prod;
+        $obj->produto[] = $prod;
 
         // frete
-        $obj->modFrete = Sefaz::MODFRETE_SEM_FRETE;
+        $obj->transp->modFrete = SefazAutorizacaoTransp::MODFRETE_SEM_FRETE;
 
         // volumes
-        $obj->vol = new StdClass();
         $obj->vol->esp   = 'Caixa';
         $obj->vol->marca = '';
         $obj->vol->nVol  = 1;
@@ -274,42 +195,37 @@ class Sefaz {
         $obj->vol->pesoB = 1;
 
         // dados da fatura
-        $obj->fat = new \stdClass();
         $obj->fat->nFat  = 1;
         $obj->fat->vOrig = 16.09;
         $obj->fat->vLiq  = 16.09;
 
         // duplicatas
-        $obj->dupList = [];
-
         $dup        = new \stdClass();
         $dup->nDup  = $dup->nDup;
         $dup->dVenc = $dup->dVenc;
         $dup->vDup  = $dup->vDup;
-        $obj->dupList[] = $dup;
+        $obj->dup[] = $dup;
 
         // troco
-        $obj->vTroco = 0;
+        $obj->pag->vTroco = 0;
 
         // pagamento
-        $obj->detPagList = [];
-
-        $pag = new \stdClass();
+        $pag = new SefazAutorizacaoDetPag();
         $pag->tPag = '01'; // ?
         $pag->vPag = 16.09;
         $pag->indPag = 0; // /0= Pagamento à Vista 1= Pagamento à Prazo
-        $obj->detPagList[] = $pag;
+        $obj->detPag[] = $pag;
 
         return $obj;
     }
 
-    public function validaAutoriza(stdClass $obj){
+    public function validaAutoriza(SefazAutorizacao $obj){
         if($obj->dest == null){
             throw new Exception("Dados do destinatário vazio");
         }
     }
 
-    public function autoriza(stdClass $obj,$idLote){
+    public function autoriza(SefazAutorizacao $obj, $idLote){
         $this->validaAutoriza($obj);
 
         $now = new DateTime();
@@ -429,7 +345,7 @@ class Sefaz {
                 $ICMSTot->vBC   += $prod->ICMS->vBC;
                 $ICMSTot->vICMS += $prod->ICMS->vICMS;
                 $ICMSTot->vProd += $prod->vProd;
-                $ICMSTot->vNF   = $ICMSTot->vProd;
+                $ICMSTot->vNF    = $ICMSTot->vProd;
             }
 
             /*
@@ -565,13 +481,18 @@ class Sefaz {
         $tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($certificadoDigital, $this->config->certificadoSenha));
         $tools->model($obj->mod); // modelo
 
-        $xmlAssinado = $tools->signNFe($xml);
+        $output = new StdClass();
+        $output->xmlAssinado = null;
+        $output->retornoLote = null;
 
-        $resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
+        $output->xmlAssinado = $tools->signNFe($xml);
+
+        $resp = $tools->sefazEnviaLote([$output->xmlAssinado], $idLote);
 
         $st = new NFePHP\NFe\Common\Standardize();
-        $std = $st->toStd($resp);
-        return $std;
+        $output->retornoLote = $st->toStd($resp);
+
+        return $output;
     }
 }
 ?>
