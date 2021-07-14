@@ -1,7 +1,7 @@
 <?
 namespace zion\sefaz;
 
-class SefazAutorizacaoDestEndereco {
+class SefazAutorizacaoEmitEndereco {
     public $xLgr;
     public $nro;
     public $xBairro;

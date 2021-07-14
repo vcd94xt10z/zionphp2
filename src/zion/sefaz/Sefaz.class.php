@@ -19,8 +19,10 @@ use \zion\core\System;
 class Sefaz {
     // configurações para se comunicar com o Sefaz
     private $config = null;
+
+    private $erros = [];
     
-    public function __construct(stdClass $config){
+    public function __construct(SefazConfig $config){
         if($config == null){
             throw new Exception("Configuração ausente");
         }
@@ -45,80 +47,8 @@ class Sefaz {
             throw new Exception("Empresa ausente");
         }
 
-        if($config->emit->cnpj == null){
-            throw new Exception("CNPJ ausente");
-        }
-
-        if($config->emit->ie == null){
-            throw new Exception("Inscrição estadual ausente");
-        }
-
-        if($config->emit->razaoSocial == null){
-            throw new Exception("Razão social ausente");
-        }
-
-        if($config->emit->CRT == null){
-            throw new Exception("CRT ausente");
-        }
-
-        if($config->emit->endereco == null){
-            throw new Exception("Endereço ausente");
-        }
-
-        if($config->emit->endereco->rua == null){
-            throw new Exception("Rua ausente");
-        }
-
-        if($config->emit->endereco->numero == null){
-            throw new Exception("Número da rua ausente");
-        }
-
-        if($config->emit->endereco->bairro == null){
-            throw new Exception("Bairro ausente");
-        }
-
-        if($config->emit->endereco->cidade == null){
-            throw new Exception("Nome da cidade ausente");
-        }
-
-        if($config->emit->endereco->cidadeIBGE == null){
-            throw new Exception("Código do IBGE da cidade ausente");
-        }
-
-        if($config->emit->endereco->uf == null){
-            throw new Exception("UF ausente");
-        }
-
-        if($config->emit->endereco->cep == null){
-            throw new Exception("CEP ausente");
-        }
-
         if($config->responsavelTecnico == null){
             throw new Exception("Dados do responsável tecnico ausente");
-        }
-
-        if($config->responsavelTecnico->nome == null){
-            throw new Exception("Nome do responsável tecnico ausente");
-        }
-
-        if($config->responsavelTecnico->cnpj == null){
-            throw new Exception("CNPJ do responsável tecnico ausente");
-        }
-
-        if($config->responsavelTecnico->email == null){
-            throw new Exception("E-mail do responsável tecnico ausente");
-        }
-
-        if($config->responsavelTecnico->telefone == null){
-            throw new Exception("Telefone do responsável tecnico ausente");
-        }
-
-        if($config->responsavelTecnico->CSRT == null){
-            throw new Exception("CSRT do responsável tecnico ausente");
-        }
-
-        if($config->responsavelTecnico->CSRTToken == null){
-            throw new Exception("CSRT Token do responsável tecnico ausente");
         }
 
         $this->config = $config;
@@ -130,7 +60,7 @@ class Sefaz {
      *
      * @return void
      */
-    public function getAutorizaObjTestNFCePF(){
+    public static function getAutorizaObjTestNFCePF(){
         $obj = new SefazAutorizacao();
 
         // dados gerais
@@ -138,7 +68,7 @@ class Sefaz {
         $obj->cNF      = rand(10000000,99999999); // Código Numérico que compõe a Chave de Acesso da NF-e
         $obj->natOp    = "VENDA";
         $obj->mod      = SefazAutorizacao::MOD_CUPOM_FISCAL_ELETRONICO;
-        $obj->cNF      = 10001;   // Número da Nota fiscal
+        $obj->nNF      = 10001;   // Número da Nota fiscal
         $obj->serie    = 1;       // Série
         $obj->indPag   = SefazAutorizacao::INDPAG_PAGAMENTO_A_VISTA;
         $obj->tpNF     = SefazAutorizacao::TPNF_SAIDA;
@@ -152,9 +82,17 @@ class Sefaz {
         $obj->procEmi  = SefazAutorizacao::PROCEMI_EMISSAO_NFE_APLICATIVO_CONTRIBUINTE;
         
         // dados do destinatário
-        $obj->dest       = new SefazAutorizacaoDest();
-        $obj->dest->nome = "Cliente Teste";
-        $obj->dest->CPF  = "";
+        $obj->dest        = new SefazAutorizacaoDest();
+        $obj->dest->xNome = "José da Silva";
+        $obj->dest->CPF   = "43632355940";
+
+        $obj->dest->endereco->xLgr = "Rua da Canafístula";
+        $obj->dest->endereco->nro  = "132";
+        $obj->dest->endereco->xBairro = "Jardim São Rafael";
+        $obj->dest->endereco->xMun    = "Londrina";
+        $obj->dest->endereco->cMun    = "4113700";
+        $obj->dest->endereco->UF      = "PR";
+        $obj->dest->endereco->CEP     = "86035294";
 
         // produtos
         $prod = new SefazAutorizacaoProduto();
@@ -176,6 +114,8 @@ class Sefaz {
         $prod->vTotTrib = 16.09;
 
         // ICMS
+        $prod->ICMS->item  = 1;
+        $prod->ICMS->orig  = 0;
         $prod->ICMS->CST   = '00';
         $prod->ICMS->modBC = 0;
         $prod->ICMS->vBC   = 16.09;
@@ -188,9 +128,11 @@ class Sefaz {
         $obj->transp->modFrete = SefazAutorizacaoTransp::MODFRETE_SEM_FRETE;
 
         // volumes
+        $obj->vol->item = 1;
         $obj->vol->esp   = 'Caixa';
-        $obj->vol->marca = '';
+        $obj->vol->marca = 'Generico';
         $obj->vol->nVol  = 1;
+        $obj->vol->qVol  = 1;
         $obj->vol->pesoL = 1;
         $obj->vol->pesoB = 1;
 
@@ -201,9 +143,9 @@ class Sefaz {
 
         // duplicatas
         $dup        = new \stdClass();
-        $dup->nDup  = $dup->nDup;
-        $dup->dVenc = $dup->dVenc;
-        $dup->vDup  = $dup->vDup;
+        $dup->nDup  = '1';
+        $dup->dVenc = date("Y-m-d");
+        $dup->vDup  = 16.09;
         $obj->dup[] = $dup;
 
         // troco
@@ -230,7 +172,7 @@ class Sefaz {
 
         $now = new DateTime();
 
-        $nfe = new NFePHP\NFe\Make();
+        $nfe = new \NFePHP\NFe\Make();
 
         $std = new \stdClass();
         $std->versao = '4.00';
@@ -248,7 +190,7 @@ class Sefaz {
         $std->dhSaiEnt = $now->format("Y-m-d")."T".$now->format("H:i:s").'-03:00';
         $std->tpNF     = $obj->tpNF;
         $std->idDest   = $obj->idDest;
-        $std->cMunFG   = $this->config->emit->endereco->cidadeIBGE;
+        $std->cMunFG   = $this->config->emit->endereco->cMun;
         $std->tpImp    = $obj->tpImp;
         $std->tpEmis   = $obj->tpEmis;
         $std->cDV      = 0; // Digito Verificador
@@ -263,18 +205,18 @@ class Sefaz {
         $std = new \stdClass();
         $std->CNPJ  = $this->config->emit->CNPJ;
         $std->IE    = $this->config->emit->IE;
-        $std->xNome = $this->config->emit->razaoSocial;
+        $std->xNome = $this->config->emit->xNome;
         $std->CRT   = $this->config->emit->CRT;
         $nfe->tagemit($std);
 
         $std = new \stdClass();
-        $std->xLgr    = $this->config->emit->endereco->rua;
-        $std->nro     = $this->config->emit->endereco->numero;
-        $std->xBairro = $this->config->emit->endereco->bairro;
-        $std->cMun    = $this->config->emit->endereco->cidadeIBGE;
-        $std->xMun    = $this->config->emit->endereco->cidade;
-        $std->UF      = $this->config->emit->endereco->uf;
-        $std->CEP     = $this->config->emit->endereco->cep;
+        $std->xLgr    = $this->config->emit->endereco->xLgr;
+        $std->nro     = $this->config->emit->endereco->nro;
+        $std->xBairro = $this->config->emit->endereco->xBairro;
+        $std->cMun    = $this->config->emit->endereco->cMun;
+        $std->xMun    = $this->config->emit->endereco->xMun;
+        $std->UF      = $this->config->emit->endereco->UF;
+        $std->CEP     = $this->config->emit->endereco->CEP;
         $std->cPais   = '1058';
         $std->xPais   = 'BRASIL';
         $nfe->tagenderEmit($std);
@@ -288,13 +230,13 @@ class Sefaz {
         $nfe->tagdest($std);
 
         $std = new \stdClass();
-        $std->xLgr    = $obj->dest->endereco->rua;
-        $std->nro     = $obj->dest->endereco->numero;
-        $std->xBairro = $obj->dest->endereco->bairro;
-        $std->cMun    = $obj->dest->endereco->cidadeIBGE;
-        $std->xMun    = $obj->dest->endereco->cidade;
-        $std->UF      = $obj->dest->endereco->uf;
-        $std->CEP     = $obj->dest->endereco->cep;
+        $std->xLgr    = $obj->dest->endereco->xLgr;
+        $std->nro     = $obj->dest->endereco->nro;
+        $std->xBairro = $obj->dest->endereco->xBairro;
+        $std->cMun    = $obj->dest->endereco->cMun;
+        $std->xMun    = $obj->dest->endereco->xMun;
+        $std->UF      = $obj->dest->endereco->UF;
+        $std->CEP     = $obj->dest->endereco->CEP;
         $std->cPais   = '1058';
         $std->xPais   = 'BRASIL';
         $nfe->tagenderDest($std);
@@ -306,7 +248,7 @@ class Sefaz {
         $ICMSTot->vNF   = 0;
 
         $itemId = 1;
-        foreach($obj->productList AS $prod){
+        foreach($obj->produto AS $prod){
             $std = new \stdClass();
             $std->item     = $itemId;
             $std->cProd    = $prod->cProd;
@@ -402,7 +344,7 @@ class Sefaz {
         $nfe->tagICMSTot($std);
 
         $std = new \stdClass();
-        $std->modFrete = $obj->modFrete;
+        $std->modFrete = $obj->transp->modFrete;
         $nfe->tagtransp($std);
 
         // volumes transportados
@@ -424,7 +366,7 @@ class Sefaz {
         $nfe->tagfat($std);
 
         // duplicatas
-        foreach($obj->dupList AS $dup){
+        foreach($obj->dup AS $dup){
             $std        = new \stdClass();
             $std->nDup  = $dup->nDup;
             $std->dVenc = $dup->dVenc;
@@ -438,7 +380,7 @@ class Sefaz {
 
         // forma de pagamento
         $pagid = 1;
-        foreach($obj->detPagList AS $pag){
+        foreach($obj->detPag AS $pag){
             $std = new \stdClass();
             $std->tPag = '01'; // ?
             $std->vPag = $pag->vPag;
@@ -449,27 +391,32 @@ class Sefaz {
 
         // responsável tecnico
         $std = new stdClass();
-        $std->CNPJ     = $this->config->responsavelTecnico->cnpj;
-        $std->xContato = $this->config->responsavelTecnico->nome;
+        $std->CNPJ     = $this->config->responsavelTecnico->CNPJ;
+        $std->xContato = $this->config->responsavelTecnico->xContato;
         $std->email    = $this->config->responsavelTecnico->email;
-        $std->fone     = $this->config->responsavelTecnico->telefone;
+        $std->fone     = $this->config->responsavelTecnico->fone;
         $std->CSRT     = $this->config->responsavelTecnico->CSRT;
-        $std->idCSRT   = $this->config->responsavelTecnico->CSRTToken;
+        $std->idCSRT   = $this->config->responsavelTecnico->idCSRT;
         $nfe->taginfRespTec($std);
 
-        $xml = $nfe->getXML();
-
+        try {
+            $xml = $nfe->getXML();
+        }catch(Exception $e){
+            $this->erros = $nfe->getErrors();
+            throw new Exception("Erro em gerar XML, verifique os erros");
+        }
+        
         $config = [
             "atualizacao" => $now->format("Y-m-d H:i:s"),
             "tpAmb"       => $obj->tpAmb,
-            "razaosocial" => $this->config->emit->razaoSocial,
-            "siglaUF"     => $this->config->emit->endereco->uf,
-            "cnpj"        => $this->config->emit->cnpj,
+            "razaosocial" => $this->config->emit->xNome,
+            "siglaUF"     => $this->config->emit->endereco->UF,
+            "cnpj"        => $this->config->emit->CNPJ,
             "schemes"     => "PL_008i2",
             "versao"      => "4.00",
             "tokenIBPT"   => "AAAAAAA",
-            "CSC"         => $this->config->csc,
-            "CSCid"       => $this->config->cscIdFull
+            "CSC"         => $this->config->CSC,
+            "CSCid"       => $this->config->CSCToken
         ];
         $configJson = json_encode($config);
 
@@ -478,7 +425,7 @@ class Sefaz {
             $certificadoDigital = file_get_contents($this->config->certificadoArquivo);
         }
 
-        $tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($certificadoDigital, $this->config->certificadoSenha));
+        $tools = new \NFePHP\NFe\Tools($configJson, \NFePHP\Common\Certificate::readPfx($certificadoDigital, $this->config->certificadoSenha));
         $tools->model($obj->mod); // modelo
 
         $output = new StdClass();
@@ -489,10 +436,14 @@ class Sefaz {
 
         $resp = $tools->sefazEnviaLote([$output->xmlAssinado], $idLote);
 
-        $st = new NFePHP\NFe\Common\Standardize();
+        $st = new \NFePHP\NFe\Common\Standardize();
         $output->retornoLote = $st->toStd($resp);
 
         return $output;
+    }
+
+    public function getErros(){
+        return $this->erros;
     }
 }
 ?>

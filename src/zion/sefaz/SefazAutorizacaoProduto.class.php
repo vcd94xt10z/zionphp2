@@ -1,9 +1,6 @@
 <?
 namespace zion\sefaz;
 
-/**
- * Objeto principal para autorizar uma nota fiscal eletronica
- */
 class SefazAutorizacaoProduto {
     public $cProd;
     public $xProd;
@@ -19,9 +16,7 @@ class SefazAutorizacaoProduto {
     public $qTrib;
     public $vUnTrib;
     public $indTot;
-
     public $vTotTrib;
-
     public $ICMS;
 
     public function __construct(){
