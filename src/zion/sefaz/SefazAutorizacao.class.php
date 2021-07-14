@@ -28,7 +28,7 @@ class SefazAutorizacao {
     const INDPAG_OUTROS                      = 2;
 
     const TPNF_ENTRADA                       = 0;
-    const TPNF_SAIDA                         = 0;
+    const TPNF_SAIDA                         = 1;
 
     const IDDEST_OPERACAO_INTERNA            = 1;
     const IDDEST_OPERACAO_INTERESTADUAL      = 2;
