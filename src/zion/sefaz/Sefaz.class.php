@@ -8,6 +8,13 @@ use StdClass;
 
 use \zion\core\System;
 
+use NFePHP\NFe\Tools;
+use NFePHP\Common\Certificate;
+use NFePHP\NFe\Common\Standardize;
+use NFePHP\NFe\Complements;
+use NFePHP\Common\Soap\SoapCurl;
+use NFePHP\Common\Soap\SoapFake;
+
 /**
  * Links úteis
  * https://github.com/nfephp-org/sped-nfe/blob/master/docs/Make.md
@@ -20,11 +27,18 @@ class Sefaz {
     // configurações para se comunicar com o Sefaz
     private $config = null;
 
+    private $tpAmb;
+
     private $erros = [];
     
     public function __construct(SefazConfig $config){
         if($config == null){
             throw new Exception("Configuração ausente");
+        }
+
+        $envList = array("HOM","PRD");
+        if(!in_array($config->ENV,$envList)){
+            throw new Exception("Ambiente inválido, use ".implode(", ",$envList));
         }
 
         if($config->CSC == null){
@@ -51,7 +65,276 @@ class Sefaz {
             throw new Exception("Dados do responsável tecnico ausente");
         }
 
+        if($config->certificadoArquivo != ""){
+            $config->certificadoConteudo = file_get_contents($config->certificadoArquivo);
+            if($config->certificadoConteudo == ""){
+                throw new Exception("Certificado A1 (PFX) inválido");
+            }
+        }
+
+        $this->tpAmb = 2; // HOM
+        if($config->ENV == "PRD"){
+            $this->tpAmb = 1; // PRD
+        }
+
         $this->config = $config;
+    }
+
+    public function atorInteressado(stdClass $obj){
+        $now = new DateTime();
+
+        $config = [
+            "atualizacao" => $now->format("Y-m-d H:i:s"),
+            "tpAmb"       => $this->tpAmb,
+            "razaosocial" => $this->config->emit->xNome,
+            "siglaUF"     => $this->config->emit->endereco->UF,
+            "cnpj"        => $this->config->emit->CNPJ,
+            "schemes"     => "PL_009_V4",
+            "versao"      => "4.00",
+            "tokenIBPT"   => "AAAAAAA",
+            "CSC"         => $this->config->CSC,
+            "CSCid"       => $this->config->CSCToken,
+            "proxyConf" => [
+                "proxyIp" => "",
+                "proxyPort" => "",
+                "proxyUser" => "",
+                "proxyPass" => ""
+            ]
+        ];
+        
+        $configJson = json_encode($config);
+        
+        //carrega o conteudo do certificado.
+        $content = $this->config->certificadoConteudo;
+        
+        try {
+            //intancia a classe tools
+            $tools = new Tools($configJson, Certificate::readPfx($content, $this->config->certificadoSenha));
+            //seta o modelo para 55
+            $tools->model(self::getNFeModel($obj->chave));
+            
+            $soap = new SoapFake();
+            $soap->disableCertValidation();
+            $tools->loadSoapClass($soap);
+        
+            $std = new \stdClass();
+            $std->chNFe = $obj->chave; //chave de 44 digitos da nota do fornecedor
+            $std->tpAutor = $obj->autor; //1-emitente 2-destinatário 3-transportador indica quem está incluindo ou removendo atores
+            $std->verAplic = '1.2.3'; //versão da aplicação que está gerando o evento
+            $std->nSeqEvento = 1; //numero sequencial do evento, incrementar ao incluir outros ou remover
+            $std->tpAutorizacao = 1; //0-não autorizo ou 1-autorizo
+            $std->CNPJ = $obj->CNPJ;
+            $std->CPF = $obj->CPF;
+            
+            $response = $tools->sefazAtorInteressado($std);
+            
+            $fake = \NFePHP\NFe\Common\FakePretty::prettyPrint($response);
+            //header('Content-type: text/plain; charset=UTF-8');
+            return $fake;
+        } catch (\Exception $e) {
+            throw new Exception("Erro ao registrar ator interessado: ".$e->getMessage());
+        }
+    }
+
+    public function comprovanteEntrega(StdClass $obj){
+        $now = new DateTime();
+
+        $config = [
+            "atualizacao" => $now->format("Y-m-d H:i:s"),
+            "tpAmb"       => $this->tpAmb,
+            "razaosocial" => $this->config->emit->xNome,
+            "siglaUF"     => $this->config->emit->endereco->UF,
+            "cnpj"        => $this->config->emit->CNPJ,
+            "schemes"     => "PL_009_V4",
+            "versao"      => "4.00",
+            "tokenIBPT"   => "AAAAAAA",
+            "CSC"         => $this->config->CSC,
+            "CSCid"       => $this->config->CSCToken,
+            "proxyConf" => [
+                "proxyIp" => "",
+                "proxyPort" => "",
+                "proxyUser" => "",
+                "proxyPass" => ""
+            ]   
+        ];
+        
+        //monta o config.json
+        $configJson = json_encode($config);
+        
+        //carrega o conteudo do certificado.
+        $content = $this->config->certificadoConteudo;
+        
+        try {
+            //intancia a classe tools
+            $tools = new Tools($configJson, Certificate::readPfx($content, $this->config->certificadoSenha));
+            //seta o modelo para 55
+            $tools->model(self::getNFeModel($obj->chave));
+            
+            $soap = new SoapFake();
+            $soap->disableCertValidation();
+            $tools->loadSoapClass($soap);
+        
+            $std = new \stdClass();
+            $std->chNFe = $obj->chave; //chave de 44 digitos da nota do fornecedor
+            $std->imagem = $obj->imagem; // aqui pode ser colocada uma imagem ou uma string que fará parte do hash 
+            $std->nSeqEvento = 1;
+            $std->verAplic = '1.2.3'; //versão da aplicação que está gerando o evento
+            $std->data_recebimento = $now->format("Y-m-d")."T".$now->format("H:i:s").'-03:00'; //data de recebimento
+            $std->documento_recebedor = $obj->documento_recebedor; //numero do documento do recebedor
+            $std->nome_recebedor = $obj->nome_recebedor;
+            $std->latitude = $obj->latitude;
+            $std->longitude = $obj->longitude;
+            $std->cancelar = false;
+            
+            $response = $tools->sefazComprovanteEntrega($std);
+            
+            $fake = \NFePHP\NFe\Common\FakePretty::prettyPrint($response);
+            //header('Content-type: text/plain; charset=UTF-8');
+            return $fake;
+        } catch (\Exception $e) {
+            throw new Exception("Erro ao gerar comprovante de entrega: ".$e->getMessage());
+        }
+    }
+
+    public function status($nfeModel,$uf){
+        $now = new DateTime();
+
+        $config = [
+            "atualizacao" => $now->format("Y-m-d H:i:s"),
+            "tpAmb"       => $this->tpAmb,
+            "razaosocial" => $this->config->emit->xNome,
+            "siglaUF"     => $this->config->emit->endereco->UF,
+            "cnpj"        => $this->config->emit->CNPJ,
+            "schemes"     => "PL_009_V4",
+            "versao"      => "4.00",
+            "tokenIBPT"   => "AAAAAAA",
+            "CSC"         => $this->config->CSC,
+            "CSCid"       => $this->config->CSCToken,
+            "proxyConf" => [
+                "proxyIp" => "",
+                "proxyPort" => "",
+                "proxyUser" => "",
+                "proxyPass" => ""
+            ]   
+        ];
+
+        //monta o config.json
+        $configJson = json_encode($config);
+        
+        //carrega o conteudo do certificado.
+        $content = $this->config->certificadoConteudo;
+        
+        //intancia a classe tools
+        $tools = new Tools($configJson, Certificate::readPfx($content, $this->config->certificadoSenha));
+        $tools->model($nfeModel);
+        
+        //sempre que ativar a contingência pela primeira vez essa informação deverá ser 
+        //gravada na base de dados ou em um arquivo para uso posterior, até que a mesma seja 
+        //desativada pelo usuário, essa informação não é persistida automaticamente e depende 
+        //de ser gravada pelo ERP
+        //NOTA: esse retorno da função é um JSON
+        $contingencia = $tools->contingency->activate('SP', 'Teste apenas');
+        
+        //e se necessário carregada novamente quando a classe for instanciada,
+        //obtendo a string da contingência em json e passando para a classe
+        //$tools->contingency->load($contingencia);
+        
+        //Se não for passada a sigla do estado, o status será obtido com o modo de
+        //contingência, se este estiver ativo ou seja SVCRS ou SVCAN, usando a sigla 
+        //contida no config.json
+        $responseXML = $tools->sefazStatus();
+        
+        //Se for passada a sigla do estado, o status será buscado diretamente 
+        //no autorizador indcado pela sigla do estado, dessa forma ignorando
+        //a contingência
+        //$response = $tools->sefazStatus('SP');
+        
+        $stdCl = new Standardize($responseXML);
+        return $stdCl;
+    }
+
+    public function cancela($chave,$xJust,$nProt){
+        // validações
+        if($chave == ""){
+            throw new Exception("Chave de acesso vazia");
+        }
+
+        if(strlen($chave) <> 44){
+            throw new Exception("Chave de acesso deve ter 44 digitos");
+        }
+
+        $now = new DateTime();
+
+        $config = [
+            "atualizacao" => $now->format("Y-m-d H:i:s"),
+            "tpAmb"       => $this->tpAmb,
+            "razaosocial" => $this->config->emit->xNome,
+            "siglaUF"     => $this->config->emit->endereco->UF,
+            "cnpj"        => $this->config->emit->CNPJ,
+            "schemes"     => "PL_009_V4",
+            "versao"      => "4.00",
+            "tokenIBPT"   => "AAAAAAA",
+            "CSC"         => $this->config->CSC,
+            "CSCid"       => $this->config->CSCToken,
+            "proxyConf" => [
+                "proxyIp" => "",
+                "proxyPort" => "",
+                "proxyUser" => "",
+                "proxyPass" => ""
+            ]   
+        ];
+
+        // monta o config.json
+        $configJson = json_encode($config);
+        
+        //carrega o conteudo do certificado.
+        $content = $this->config->certificadoConteudo;
+        
+        try {
+            $tools = new Tools($configJson, Certificate::readPfx($content, $this->config->certificadoSenha));
+            $tools->model(self::getNFeModel($chave));
+            
+            $response = $tools->sefazCancela($chave, $xJust, $nProt);
+            
+            //você pode padronizar os dados de retorno atraves da classe abaixo
+            //de forma a facilitar a extração dos dados do XML
+            //NOTA: mas lembre-se que esse XML muitas vezes será necessário, 
+            //      quando houver a necessidade de protocolos
+            $stdCl = new Standardize($response);
+            //nesse caso $std irá conter uma representação em stdClass do XML retornado
+            $std = $stdCl->toStd();
+            //nesse caso o $arr irá conter uma representação em array do XML retornado
+            $arr = $stdCl->toArray();
+            //nesse caso o $json irá conter uma representação em JSON do XML retornado
+            $json = $stdCl->toJson();
+            
+            //verifique se o evento foi processado
+            if ($std->cStat != 128) {
+                //houve alguma falha e o evento não foi processado
+                throw new Exception("Erro ao cancelar, código Sefaz ".$std->cStat);
+            } else {
+                $cStat = $std->retEvento->infEvento->cStat;
+                if ($cStat == '101' || $cStat == '135' || $cStat == '155' ) {
+                    //SUCESSO PROTOCOLAR A SOLICITAÇÂO ANTES DE GUARDAR
+                    $xml = Complements::toAuthorize($tools->lastRequest, $response);
+                    //grave o XML protocolado e prossiga com outras tarefas de seu aplicativo
+                } else {
+                    //houve alguma falha no evento 
+                    throw new Exception("Erro ao cancelar, código Sefaz ".$std->cStat);
+                }
+            }    
+        } catch (\Exception $e) {
+            throw new Exception("Erro ao cancelar: ".$e->getMessage());
+        }
+    }
+
+    public static function getNFeModel($chave){
+        $chave = preg_replace("[^0-9]","",$chave);
+        if(strlen($chave) <> '44'){
+            return;
+        }
+
+        return substr($chave,20,2);
     }
 
     public function validaAutoriza(SefazAutorizacao $obj){
