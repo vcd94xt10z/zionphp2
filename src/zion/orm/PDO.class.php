@@ -13,7 +13,7 @@ class PDO extends \PDO {
     public static $enableSQLHistory = false;
     public static $enableSQLLog     = false;
     public static $sqlHistory       = array();
-    public static $lastSQL = "";
+    public static $lastSQL 			= "";
     
     public function __construct($dsn, $username, $passwd, array $options){
         parent::__construct($dsn,$username,$passwd,$options);
