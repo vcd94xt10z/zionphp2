@@ -60,6 +60,9 @@ class MercadoPago {
         ];
         
         $body = json_encode($obj);
+        if($body == null){
+            throw new Exception("Erro no objeto para gerar o PIX");
+        }
         
         $ret = $this->curl($url,"POST",$headerList,$body);
         return $ret;
