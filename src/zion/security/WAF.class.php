@@ -9,6 +9,11 @@ use zion\net\TCP;
 
 /**
  * Web Application Firewall
+ * 
+ * Como usar 
+ * Chame o método start no seu index e o sistema faz o resto
+ * \zion\security\WAF::start();
+ * 
  * @author Vinicius Cesar Dias
  * @since 31/01/2019
  */
@@ -266,6 +271,7 @@ class WAF {
         $elements = [
             "wp-config.php","wp-login.php","phpmyadmin","adminer","htpasswd","/etc/",
             ".cgi",".sh",".pl","wget ","include(","require(",
+            ".git",".svn","/install/",
             "eval(","system(","shell_exec("
         ];
         if(self::foundAnyItens($_SERVER["REQUEST_URI"],$elements)){
