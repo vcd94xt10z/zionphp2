@@ -182,8 +182,12 @@ class PagSeguro {
     }
     
     public function boleto(ObjectVO $so, ObjectVO $customer){
-        $addr        = $so->get("deliveryAddress");
-        $phone       = $customer->get("cell_phone");
+        $addr  = $so->get("deliveryAddress");
+        $phone = $customer->get("cell_phone");
+        if($phone == ""){
+            $phone = $customer->get("home_phone");
+        }
+
         $phoneDDD    = substr($phone,0,2);
         $phoneNumber = substr($phone,2);
         
@@ -327,7 +331,12 @@ class PagSeguro {
      */
     public function cartaoDeCredito(ObjectVO $so, ObjectVO $customer, StdClass $card){
         $notificationURL = "https://".$_SERVER["SERVER_NAME"]."/pagseguro/notificacao";
-        $phone       = $customer->get("cell_phone");
+        
+        $phone = $customer->get("cell_phone");
+        if($phone == ""){
+            $phone = $customer->get("home_phone");
+        }
+        
         $phoneDDD    = substr($phone,0,2);
         $phoneNumber = substr($phone,2);
         $docType     = "CPF";
