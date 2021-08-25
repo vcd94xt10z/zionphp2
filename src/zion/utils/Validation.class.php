@@ -29,6 +29,45 @@ class Validation {
         
         return (sizeof($errors) <= 0);
     }
+
+    public static function validatePassword($password){
+        $errors = [];
+
+        if (strlen($password) < 8) {
+            $errors[] = "Senha curta, informe ao menos 8 caracteres";
+        }
+
+        if (strlen($password) > 20) {
+            $errors[] = "Senha longa, informe no máximo 20 caracteres";
+        }
+        
+        if (!preg_match("#[0-9]+#", $password)) {
+            $errors[] = "Senha não contém nenhum numero";
+        }
+        
+        if (!preg_match("#[a-z]+#", $password)) {
+            $errors[] = "Senha não contém nenhuma letra minuscula";
+        }
+
+        if (!preg_match("#[A-Z]+#", $password)) {
+            $errors[] = "Senha não contém nenhuma letra maiuscula";
+        }
+        
+        $specialList = "!@#$%&*()-+";
+        $specialList = str_split($specialList,1);
+        $found = false;
+        foreach($specialList AS $c){
+            if(strpos($password,$c) !== false){
+                $found = true;
+                break;
+            }
+        }
+        if(!$found){
+            $errors[] = "Senha não contém nenhuma caracter especial";
+        }
+        
+        return $errors;
+    }
     
     /**
      * Verifica se é um CEP válido
