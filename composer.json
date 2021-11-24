@@ -1,0 +1,20 @@
+{
+    "name": "vcd94xt10z/zion2",
+    "description": "Framework Zion PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "Vinicius Cesar Dias",
+        "email": "dias.viniciuscesar@gmail.com"
+    }],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+             "zion\\": "src/zion/"
+         },
+         "files": ["initialize.php"]
+      },
+    "require": {
+        "php": "^7.0 || ^8.0"
+    }
+}

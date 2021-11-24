@@ -16,7 +16,7 @@ class System {
 	public static $data = array();
 	
 	private static $connection = null; 
-	
+
 	public static function enableErrorHandler($showErrors=false){
 		set_error_handler("zion\core\ErrorHandler::handleError",E_ALL);
 	    set_exception_handler("zion\core\ErrorHandler::handleException");
