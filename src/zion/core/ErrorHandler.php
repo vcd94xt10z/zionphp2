@@ -124,9 +124,9 @@ class ErrorHandler {
 	        $i++;
 	    }
 
-	    echo "<h1 style='font-family: Arial !important;'>".$e->getMessage()."</h1>";
+	    echo "<h1>".$e->getMessage()."</h1>";
 	    echo "<hr>";
-	    echo "<pre style='font-family: Arial !important;font-size:12px !important'><code>".$buffer."</code></pre>";
+	    echo "<pre style='font-size:12px !important'><code>".$buffer."</code></pre>";
 	    echo "<hr>";
 	    echo "<div>".$e->getFile()." [".$e->getLine()."]</div>";
 	}

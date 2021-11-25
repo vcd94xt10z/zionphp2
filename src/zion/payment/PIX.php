@@ -1,8 +1,6 @@
 <?php
 namespace zion\payment;
 
-require_once(\zion\ROOT."src/phpqrcode/qrlib.php");
-
 use Exception;
 use StdClass;
 
@@ -50,10 +48,10 @@ class PIX {
         //$px[01]="12"; //Se o valor 12 estiver presente, significa que o BR Code só pode ser utilizado uma vez.
         $px[26][00]="BR.GOV.BCB.PIX"; //Indica arranjo específico; “00” (GUI) obrigatório e valor fixo: br.gov.bcb.pix
         $px[26][01]=$obj->chave;
-        if (!empty($descricao)) {
-            $tam_max_descr=99-(4+4+4+14+strlen($chave_pix));
-            if (strlen($descricao) > $tam_max_descr) {
-                $descricao=substr($descricao,0,$tam_max_descr);
+        if (!empty($obj->descricao)) {
+            $tam_max_descr=99-(4+4+4+14+strlen($obj->chave));
+            if (strlen($obj->descricao) > $tam_max_descr) {
+                $descricao=substr($obj->descricao,0,$tam_max_descr);
             }
             $px[26][02]=$descricao;
         }

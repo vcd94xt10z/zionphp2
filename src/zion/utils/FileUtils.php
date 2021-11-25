@@ -238,7 +238,7 @@ class FileUtils {
 	 */
 	public static function listFilesRecursively($rootFolder,array &$allFiles,array $ignoreFiles=array(),array $ignoreFilesAbs=array()){
 		if($rootFolder == ""){
-			$rootFolder == "/";
+			$rootFolder = "/";
 		}
 		$rootFolder = rtrim($rootFolder,\DS).\DS;
 		

@@ -514,8 +514,6 @@ class HTTPUtils {
         $keyValueArr = [];
         parse_str($keyValueStr, $keyValueArr);
         return array_merge($a_data, $keyValueArr);
-        
-        return $a_data;
     }
 }
 ?>

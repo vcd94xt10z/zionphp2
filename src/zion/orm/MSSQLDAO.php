@@ -322,12 +322,12 @@ class MSSQLDAO extends AbstractDAO {
     
     public function increase(PDO $db, string $field, array $keys, int $quantity = 1): int {
         throw new Exception("Método increase não implementado");
-        return -1;
+        //return -1;
     }
 
     public function decrease(PDO $db, string $field, array $keys, int $quantity = 1): int {
         throw new Exception("Método decrease não implementado");
-        return -1;
+        //return -1;
     }
 }
 ?>
