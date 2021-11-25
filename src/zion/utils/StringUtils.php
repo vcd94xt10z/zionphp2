@@ -48,7 +48,7 @@ class StringUtils {
         $string = "";
         
         for ($p = 0; $p < $length; $p++) {
-            $string .= $characters[mt_rand(0, strlen($characters))];
+            $string .= $characters[random_int(0, strlen($characters))];
         }
         
         return $string;

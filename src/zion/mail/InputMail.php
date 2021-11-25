@@ -52,9 +52,9 @@ class InputMail extends Mail {
 		return $output;
 	}
 	
-	public function getAttachmentByMD5($md5){
+	public function getAttachmentByHash($hash){
 		foreach($this->parts AS $part){
-			if(hash("md5", $part->getContent()) == $md5){
+			if(hash("sha256", $part->getContent()) == $hash){
 				return EMLParser::createAttachmentByPart($part);
 			}
 		}

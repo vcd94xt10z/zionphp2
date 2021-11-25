@@ -18,7 +18,7 @@ abstract class CacheInterface {
         $key = preg_replace("/[^0-9a-zA-Z\_\-]/","_",$key);
         
         // deixando com hash para acelerar a busca
-        $key = md5($key);
+        $key = hash("sha256",$key);
         
         return $key;
     }
