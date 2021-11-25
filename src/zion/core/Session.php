@@ -140,7 +140,7 @@ class Session {
         
         // gerando id de sessão
         if($id == null){
-            $id = md5(uniqid("server1",true).rand(100000,999999));
+            $id = hash("sha256", uniqid("server1",true).random_int(100000,999999));
         }
         
         // enviando instrução para criar o cookie no cabeçalho da resposta

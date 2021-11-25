@@ -31,7 +31,7 @@ define('MIME_ADDRESS_FIRST',            2);
 	<package>net.manuellemos.mimeparser</package>
 
 	<version>@(#) $Id: mime_parser.php,v 1.85 2012/08/23 12:19:59 mlemos Exp $</version>
-	<copyright>Copyright � (C) Manuel Lemos 2006 - 2008</copyright>
+	<copyright>Copyright � (C) Manuel Lemos 2006 - 2008</copyright>
 	<title>MIME parser</title>
 	<author>Manuel Lemos</author>
 	<authoraddress>mlemos-at-acm.org</authoraddress>
@@ -2419,12 +2419,14 @@ class mime_parser_class
 										$recipients[$r]['Status'] = $headers['status'];
 									if(IsSet($headers['original-recipient']))
 									{
-										strtok($headers['original-recipient'], ';');
+										// comentando já que o retorno não é usado
+										//strtok($headers['original-recipient'], ';');
 										$recipients[$r]['Address'] = trim(strtok(''));
 									}
 									elseif(IsSet($headers['final-recipient']))
 									{
-										strtok($headers['final-recipient'], ';');
+										// comentando já que o retorno não é usado
+										//strtok($headers['final-recipient'], ';');
 										$recipients[$r]['Address'] = trim(strtok(''));
 									}
 								}

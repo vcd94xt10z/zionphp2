@@ -20,7 +20,7 @@ class SefazTest {
 
         // dados gerais
         $obj->cUF      = 41; // PR
-        $obj->cNF      = rand(10000000,99999999); // Código Numérico que compõe a Chave de Acesso da NF-e
+        $obj->cNF      = random_int(10000000,99999999); // Código Numérico que compõe a Chave de Acesso da NF-e
         $obj->natOp    = "VENDA";
         $obj->mod      = SefazAutorizacao::MOD_CUPOM_FISCAL_ELETRONICO;
         $obj->nNF      = 10001;   // Número da Nota fiscal

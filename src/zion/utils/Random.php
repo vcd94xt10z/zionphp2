@@ -21,9 +21,9 @@ class Random {
         }
         
         for($i=0;$i<$length;$i++){
-            $randNumber    = chr(rand(48,57));  // numeros
-            $randLetterMin = chr(rand(97,122)); // letras minusculas
-            $randLetterMai = chr(rand(65,90));  // letras maiusculas
+            $randNumber    = chr(random_int(48,57));  // numeros
+            $randLetterMin = chr(random_int(97,122)); // letras minusculas
+            $randLetterMai = chr(random_int(65,90));  // letras maiusculas
             $randSpecial   = $specialList[array_rand($specialList)]; // especiais
             
             if($numberAcc <= $numbers){
@@ -126,14 +126,14 @@ class Random {
      * @see https://gist.github.com/acfreitas/fb7465c33156ec144513 
      */
     public static function cnpj($mascara = true) {
-        $n1 = rand(0, 9);
-        $n2 = rand(0, 9);
-        $n3 = rand(0, 9);
-        $n4 = rand(0, 9);
-        $n5 = rand(0, 9);
-        $n6 = rand(0, 9);
-        $n7 = rand(0, 9);
-        $n8 = rand(0, 9);
+        $n1 = random_int(0, 9);
+        $n2 = random_int(0, 9);
+        $n3 = random_int(0, 9);
+        $n4 = random_int(0, 9);
+        $n5 = random_int(0, 9);
+        $n6 = random_int(0, 9);
+        $n7 = random_int(0, 9);
+        $n8 = random_int(0, 9);
         $n9 = 0;
         $n10 = 0;
         $n11 = 0;
@@ -161,15 +161,15 @@ class Random {
      * @see https://gist.github.com/acfreitas/fb7465c33156ec144513
      */
     public static function cpf($mascara = true) {
-        $n1 = rand(0, 9);
-        $n2 = rand(0, 9);
-        $n3 = rand(0, 9);
-        $n4 = rand(0, 9);
-        $n5 = rand(0, 9);
-        $n6 = rand(0, 9);
-        $n7 = rand(0, 9);
-        $n8 = rand(0, 9);
-        $n9 = rand(0, 9);
+        $n1 = random_int(0, 9);
+        $n2 = random_int(0, 9);
+        $n3 = random_int(0, 9);
+        $n4 = random_int(0, 9);
+        $n5 = random_int(0, 9);
+        $n6 = random_int(0, 9);
+        $n7 = random_int(0, 9);
+        $n8 = random_int(0, 9);
+        $n9 = random_int(0, 9);
         $d1 = $n9 * 2 + $n8 * 3 + $n7 * 4 + $n6 * 5 + $n5 * 6 + $n4 * 7 + $n3 * 8 + $n2 * 9 + $n1 * 10;
         $d1 = 11 - (self::mod($d1, 11) );
         if ($d1 >= 10) {

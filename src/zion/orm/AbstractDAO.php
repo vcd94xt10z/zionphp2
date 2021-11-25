@@ -315,7 +315,7 @@ abstract class AbstractDAO {
 	    $sql .= $this->parseAnyFilter($filter);
 	    
 	    // lendo cache
-	    $cacheKey = md5($sql);
+	    $cacheKey = hash("sha256",$sql);
 	    if($cache){
 	        $value = Cache::get($cacheKey);
 	        if($value !== null){

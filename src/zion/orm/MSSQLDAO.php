@@ -301,12 +301,7 @@ class MSSQLDAO extends AbstractDAO {
         // order by
         $buffer = array();
         foreach ($filter->getSortList() AS $s) {
-            // uso de funções
-            if (strpos($s["name"],"(") !== false) {
-                $buffer[] = $s["name"]." ".$s["order"];
-            } else {
-                $buffer[] = $s["name"]." ".$s["order"];
-            }
+            $buffer[] = $s["name"]." ".$s["order"];
         }
         
         if (sizeof($buffer) > 0) {
