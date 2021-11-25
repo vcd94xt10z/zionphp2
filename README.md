@@ -1,5 +1,12 @@
 ![Zion Framework](https://raw.githubusercontent.com/vcd94xt10z/zionphp/master/frontend/zion/img/zion-framework.png)
 
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
+
 Você não veio aqui para fazer uma escolha, você já fez. Você esta aqui para entender porque fez sua escolha.
 
 A maioria dos usuários não está preparado para despertar. E muitos deles estão tão inertes, tão desesperadamente dependentes de outros frameworks, que irão lutar para protegê-los.
