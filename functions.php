@@ -38,7 +38,7 @@ function zion_get_config($filename,$stopOnError=true){
     $file = dirname($_SERVER["DOCUMENT_ROOT"])."/".$filename;
     if(!file_exists($file)){
         if(!$stopOnError){
-            return;
+            return null;
         }
         
         http_response_code(500);
@@ -48,7 +48,7 @@ function zion_get_config($filename,$stopOnError=true){
     
     $json = json_decode(file_get_contents($file),true);
     if(!is_array($json)){
-        return;
+        return null;
     }
     
     return $json;

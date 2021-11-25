@@ -147,7 +147,7 @@ class Session {
         // lembrando que cookies de sessão são eliminados ao sair do navegador
         //$domain = ".".$_SERVER["SERVER_NAME"];
         $domain = "";
-        setcookie(self::$sessionKey,$id,0,"/",$domain,false,true);
+        setcookie(self::$sessionKey,$id,0,"/",$domain,false,false);
         
         // definindo id e inicializando sessão
         self::$id   = $id;
