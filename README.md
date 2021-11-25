@@ -6,10 +6,19 @@ A maioria dos usuários não está preparado para despertar. E muitos deles est�
 
 Eu só posso lhe mostrar a porta. Você tem que atravessá-la.
 
-## Baixar ou atualizar para a ultima versão
-``
+## Instalação
+
+Para instalar ou atualizar para ultima versão, execute o comando abaixo:
+
+```bash
 composer require vcd94xt10z/zion2:dev-main
-``
+```
+
+## Como começar
+
+Após instalar o framework, você já pode começar a chamar as classes do sistema. Lembrando que nada que possa afetar seu projeto será feito sem que o desenvolvedor
+invoke alguma funcionalidade. O Zion pode te ajudar a fazer as tarefas mais frequêntes em projetos de desenvolvimento Web. Para mais informações, acesse a sessão de 
+funcionalidades e a documentação para entender melhor o funcionamento com exemplos.
 
 ## Documentação
 
@@ -17,9 +26,8 @@ Infelizmente, é impossível dizer o que é Zion, você tem de ver por si mesmo.
 
 Esta é sua última chance, depois não há como voltar.
 
-Se tomar a pílula [azul](https://www.youtube.com/watch?v=dQw4w9WgXcQ), a história acaba, e você acordará na sua cama acreditando no que quiser acreditar.
-
-Se tomar a pílula [vermelha](https://htmlpreview.github.io/?https://github.com/vcd94xt10z/zionphp/blob/master/docs/index.html), ficará no País das Maravilhas e eu te mostrarei até onde vai a toca do coelho.
+- Se tomar a pílula [azul](https://www.youtube.com/watch?v=dQw4w9WgXcQ), a história acaba, e você acordará na sua cama acreditando no que quiser acreditar.
+- Se tomar a pílula [vermelha](https://htmlpreview.github.io/?https://github.com/vcd94xt10z/zionphp/blob/master/docs/index.html), ficará no País das Maravilhas e eu te mostrarei até onde vai a toca do coelho.
 
 Lembre-se, tudo que ofereço é a verdade, nada mais.  
 
