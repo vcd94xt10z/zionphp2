@@ -34,7 +34,7 @@ Esse não é um passo obrigatório dependendo do que você utilizar no framework
 - Fuso horário
 - Formatação de data, hora, moeda etc
 
-```bash
+```php
 \zion\core\System::configure();
 ```
 
@@ -67,3 +67,16 @@ Lembre-se, tudo que ofereço é a verdade, nada mais.
 - Segurança: WAF, suporte a SSL e criptografia
 - Gerador de Módulos: Gere CRUD para módulos totalmente funcionais com as melhores práticas, flexível e extensível
 - Internacionalização: Use textos em seu sistema em qualquer idioma
+
+## Utilidades
+
+```php
+// Verifica se o disco atual tem espaço mínimo suficiente para a aplicação funcionar
+\zion\core\System::checkStorage();
+
+// Ativa o WAF
+\zion\security\WAF::checkAll();
+
+// Encaminha a requisição para o controle se a URI estiver no padrão
+\zion\core\App::route();
+```

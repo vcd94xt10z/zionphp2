@@ -126,15 +126,13 @@ class System {
 	/**
 	 * Verifica se há um espaço minimo para o servidor funcionar
 	 */
-	public static function checkStorage(){
+	public static function checkStorage($minFreePercent = 10){
 	    // arquivos estaticos não precisam parar a execução por falta de espaço
 	    // pois não gravam nada no disco e também são usados em páginas de erro
 	    if(self::isStaticURI()){
 	        return;
 	    }
-	    
-	    $minFreePercent = 10;
-	    
+
 	    // raiz
 	    $folder = "/";
 	    $info = System::getDiskInfo($folder);

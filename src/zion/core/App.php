@@ -38,7 +38,7 @@ class App {
             
             $className   = $controller."Controller";
             $classNameNS = "\\app\\mod\\".$module."\\controller\\".$controller."Controller";
-            $classFile   = $_SERVER["DOCUMENT_ROOT"]."/modules/".$module."/controller/".$className.".class.php";
+            $classFile   = $_SERVER["DOCUMENT_ROOT"]."/modules/".$module."/controller/".$className.".php";
             
             if(file_exists($classFile)) {
                 require_once($classFile);
@@ -65,7 +65,7 @@ class App {
                 
                 $className   = $controller."Controller";
                 $classNameNS = "\\mod\\".$module."\\controller\\".$controller."Controller";
-                $classFile   = $_SERVER["DOCUMENT_ROOT"]."/modules/".$module."/controller/".$className.".class.php";
+                $classFile   = $_SERVER["DOCUMENT_ROOT"]."/modules/".$module."/controller/".$className.".php";
                 
                 if(file_exists($classFile)) {
                     require_once($classFile);
@@ -103,7 +103,7 @@ class App {
             
             $className   = $controller."Controller";
             $classNameNS = "\\mod\\".$module."\\controller\\".$controller."Controller";
-            $classFile   = \zion\APP_ROOT."public/modules/".$module."/controller/".$className.".class.php";
+            $classFile   = \zion\APP_ROOT."public/modules/".$module."/controller/".$className.".php";
             
             if(file_exists($classFile)) {
                 require_once($classFile);
