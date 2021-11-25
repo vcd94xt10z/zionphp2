@@ -270,8 +270,8 @@ class HTTPUtils {
         }
         
         // ignora erros de ssl
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, \zion\DEFAULT_CURLOPT_SSL_VERIFYHOST);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, \zion\DEFAULT_CURLOPT_SSL_VERIFYPEER);
         
         // setando opções definidas pelo usuário
         foreach($options AS $key => $value){

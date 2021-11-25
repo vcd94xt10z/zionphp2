@@ -100,8 +100,8 @@ class StreamUtils {
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, \zion\CURLOPT_SSL_VERIFYHOST_ZERO);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, \zion\CURLOPT_SSL_VERIFYPEER_ZERO);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, \zion\DEFAULT_CURLOPT_SSL_VERIFYHOST);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, \zion\DEFAULT_CURLOPT_SSL_VERIFYPEER);
         $result = curl_exec($ch);
         if($result === false){
             $error = curl_error($ch);
