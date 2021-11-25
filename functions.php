@@ -54,73 +54,11 @@ function zion_get_config($filename,$stopOnError=true){
     return $json;
 }
 
-/**
- * Autoload do sistema
- * @param string $className
- * @return boolean
- */
-function zionphp_autoload($className) {
-    // zion: framework / biblioteca
-    $className2 = str_replace("zion\\","src\\zion\\",$className);
-    $file = \zion\ROOT.str_replace("\\","/",$className2).".class.php";
-    if(file_exists($file)) {
-        require_once($file);
-        return true;
-    }
-    
-    // app: módulos
-    if(strpos($className, "mod\\") === 0){
-        $parts = explode("\\", $className);
-        $parts[0] = "modules";
-        
-        $file = rtrim($_SERVER["DOCUMENT_ROOT"])."/".implode("/", $parts).".class.php";
-        if(file_exists($file)){
-            require_once($file);
-            return true;
-        }
-        return false;
-    }
-    
-    // app: biblioteca
-    $folder = rtrim(dirname($_SERVER["DOCUMENT_ROOT"]))."/src/";
-    $file = $folder.$className.".class.php";
-    $file = str_replace("\\","/",$file);
-    
-    if(file_exists($file)){
-        require_once($file);
-        return true;
-    }
-    
-    // PHPMailer
-    if(strpos($className,"PHPMailer") === 0){
-        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/Exception.php");
-        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/SMTP.php");
-        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/POP3.php");
-        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/OAuth.php");
-        require(\zion\ROOT."src/PHPMailer-master/PHPMailer/PHPMailer.php");
-    }
-    
-    return false;
-}
-
-/**
- * Função de callback para desserialização
- * @param string $className
- */
-function zion_unserialize_callback_func($className){
-    foreach(spl_autoload_functions() AS $function){
-        $result = $function($className);
-        if($result){
-            return;
-        }
-    }
-}
-
 function zion_escape_dbval($val){
     return addslashes($val);
 }
 
-function old_count($arg){
+function php5_count($arg){
     if(is_array($arg)){
         return count($arg);
     }else{

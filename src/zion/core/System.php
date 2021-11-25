@@ -6,7 +6,6 @@ use PDOException;
 use zion\utils\HTTPUtils;
 use zion\orm\PDO;
 use zion\orm\MySQLDAO;
-use zion\core\Page;
 
 /**
  * @author Vinicius Cesar Dias
@@ -17,13 +16,55 @@ class System {
 	
 	private static $connection = null; 
 
-	public static function enableErrorHandler($showErrors=false){
-		set_error_handler("zion\core\ErrorHandler::handleError",E_ALL);
-	    set_exception_handler("zion\core\ErrorHandler::handleException");
-		\zion\core\ErrorHandler::$showErrors = $showErrors;
-	}
-
 	public static function configure(){
+		// constantes
+		define("zion\APP_ROOT",dirname($_SERVER["DOCUMENT_ROOT"])."/");
+		define("zion\ROOT",\zion\APP_ROOT."vendor/vcd94xt10z/zion2/");
+
+		if(!defined("DS")){
+			define("DS",DIRECTORY_SEPARATOR);
+		}
+		
+		// ambiente
+		$env = "PRD";
+		if(strpos($_SERVER["SERVER_NAME"],".des") !== false OR
+			strpos($_SERVER["SERVER_NAME"],".dev") !== false OR
+			strpos($_SERVER["SERVER_NAME"],"des.") !== false OR
+			strpos($_SERVER["SERVER_NAME"],"dev.") !== false){
+				$env = "DEV";
+		}else if(strpos($_SERVER["SERVER_NAME"],".qas") !== false || strpos($_SERVER["SERVER_NAME"],"qas.") !== false){
+			$env = "QAS";
+		}
+		define("zion\ENV",$env);
+
+		/*
+		* Exibição de erros
+		* No ambiente de produção não é interessante exibir erros na tela pois
+		* usuários mal intencionados podem usar as informações para explorar
+		* vunerabilidades no sistema. Todos os erros relevantes devem ir para o
+		* log para que sejam analisados posteriormente e corrigidos
+		*/
+		error_reporting(E_ALL ^ E_NOTICE);
+		if(\zion\ENV == "PRD"){
+			ini_set('display_errors', 0);
+			ini_set('display_startup_errors', 0);
+		}else{
+			ini_set('display_errors', 1);
+			ini_set('display_startup_errors', 1);
+		}
+
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+
+		// funções
+		require(\zion\ROOT."functions.php");
+
+		// configuração do arquivo
+		$config = zion_get_config_all();
+
+		// deixando a configuração global
+		\zion\core\System::set("config",$config);
+
 	    // configurações do aplicativo
 	    $all = zion_get_config_all();
 	    foreach($all AS $key => $value){
@@ -36,7 +77,7 @@ class System {
 	    define("zion\HASH_PASSWORD_PREFIX","#198@Az9fF0%*");
 	    
 	    // diretórios
-	    define("zion\TEMP",\zion\ROOT."tmp".\DS);
+	    define("zion\TEMP",\zion\APP_ROOT."tmp".\DS);
 	    
 	    // configurações
 	    ini_set("default_charset",\zion\CHARSET);
@@ -59,52 +100,12 @@ class System {
 	    System::set("currencyDecimalSep", ",");
 	    System::set("currencyThousandSep", ".");
 	    System::setTimezone(System::get("timezone"));
-	    
-	    // valida o espaço disponível
-	    self::checkStorage();
 	}
-	
-	/**
-	 * Mapea uma URI para um método de um controle
-	 */
-	public static function routeToController(){
-	    $ctrl       = null;
-	    $methodName = null;
-	    
-	    try {
-	        $uri = explode("?",$_SERVER["REQUEST_URI"]);
-	        $uri = trim($uri[0],"/");
-	        
-	        $db = System::getConnection();
-	        $dao = System::getDAO($db,"zion_core_route");
-	        $keys = array(
-	            "mandt" => \MANDT,
-	            "uri" => $uri
-	        );
-	        $obj = $dao->getObject($db, $keys);
-	        if($obj == null){
-	            return;
-	        }
-	        
-	        $className = $obj->get("controller");
-	        $methodName = $obj->get("action");
-	        
-	        if(!class_exists($className)){
-	            return;
-	        }
-	        
-	        $ctrl = new $className();
-	        if(!method_exists($ctrl,$methodName)){
-	            return;
-	        }
-	    }catch(Exception $e){
-	        return;
-	    }
-	    
-	    // se chegou até aqui, o controle existe e o método existe
-	    // se ocorrer alguma exceção, ela não será tratada
-	    $ctrl->$methodName();
-	    exit();
+
+	public static function enableErrorHandler($showErrors=false){
+		set_error_handler("zion\core\ErrorHandler::handleError",E_ALL);
+	    set_exception_handler("zion\core\ErrorHandler::handleException");
+		\zion\core\ErrorHandler::$showErrors = $showErrors;
 	}
 	
 	/**

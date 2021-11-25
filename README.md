@@ -19,7 +19,33 @@ composer require vcd94xt10z/zion2:dev-main
 Após instalar o framework, você já pode começar a chamar as classes do sistema. Lembrando que nada que possa afetar seu projeto será executado sem que o desenvolvedor
 invoke alguma funcionalidade. O Zion pode te ajudar a fazer as tarefas mais frequêntes em projetos de desenvolvimento Web. 
 
+O framework foi pensado e desenvolvido para funcionar na versão PHP >=7 com apache.
+
 Para mais informações, acesse a sessão de funcionalidades e a documentação para entender melhor o funcionamento com exemplos.
+
+## Inicialização
+
+Esse não é um passo obrigatório dependendo do que você utilizar no framework mas recomendamos que você chame esse método após carregar o autoload do composer para setar coisas como:
+- Definições do ambiente: DEV, QAS e PRD
+- Codificação UTF-8
+- Criação de constantes
+- Gerenciamento de erros
+- Carregar configurações do seu projeto (config.json)
+- Fuso horário
+- Formatação de data, hora, moeda etc
+
+```bash
+\zion\core\System::configure();
+```
+
+## Recomendações
+
+### Fluxo da aplicação
+Encaminhe o fluxo da aplicação para o index.php, isso pode ser feito no .htaccess, você pode encontrar um exemplo em
+
+```bash
+/vendor/vcd94xt10z/zion2/app-kit/webserver/sites/localhost/public/.htaccess
+```
 
 ## Documentação
 
