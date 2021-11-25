@@ -22,9 +22,11 @@ class ImageUtils {
 			}
 		}else{
 			// upload simples
-			$fileSource = $fileDestiny = $_FILES["tmp_name"];
-			self::optimizeImage($fileSource, $fileDestiny, $lossy);
-			$_FILES["size"] = filesize($fileDestiny);
+			if(strpos($_FILES["tmp_name"],"/tmp/") !== false){
+				$fileSource = $fileDestiny = $_FILES["tmp_name"];
+				self::optimizeImage($fileSource, $fileDestiny, $lossy);
+				$_FILES["size"] = filesize($fileDestiny);
+			}
 		}
 	}
 	
