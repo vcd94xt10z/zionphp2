@@ -6,6 +6,7 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=vcd94xt10z_zionphp2&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=vcd94xt10z_zionphp2)
+[![Total Downloads](http://poser.pugx.org/vcd94xt10z/zion2/downloads)](https://packagist.org/packages/vcd94xt10z/zion2)
 
 Você não veio aqui para fazer uma escolha, você já fez. Você esta aqui para entender porque fez sua escolha.
 
