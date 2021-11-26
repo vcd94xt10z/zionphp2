@@ -6,13 +6,17 @@ define("zion\CHARSET","UTF-8");
 
 // ambiente
 $env = "PRD";
-if(strpos($_SERVER["SERVER_NAME"],".des") !== false OR
-    strpos($_SERVER["SERVER_NAME"],".dev") !== false OR
-    strpos($_SERVER["SERVER_NAME"],"des.") !== false OR
-    strpos($_SERVER["SERVER_NAME"],"dev.") !== false){
-        $env = "DEV";
-}else if(strpos($_SERVER["SERVER_NAME"],".qas") !== false || strpos($_SERVER["SERVER_NAME"],"qas.") !== false){
-    $env = "QAS";
+if(array_key_exists("SERVER_NAME",$_SERVER)){
+    if(strpos($_SERVER["SERVER_NAME"],".des") !== false OR
+        strpos($_SERVER["SERVER_NAME"],".dev") !== false OR
+        strpos($_SERVER["SERVER_NAME"],"des.") !== false OR
+        strpos($_SERVER["SERVER_NAME"],"dev.") !== false){
+            $env = "DEV";
+    }else if(strpos($_SERVER["SERVER_NAME"],".qas") !== false || strpos($_SERVER["SERVER_NAME"],"qas.") !== false){
+        $env = "QAS";
+    }
+}else{
+    $env = "DEV";
 }
 define("zion\ENV",$env);
 

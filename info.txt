@@ -1,0 +1,2 @@
+Para executar os testes unitários, entre no diretório do projeto e execute
+.\vendor\bin\phpunit
