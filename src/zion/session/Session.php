@@ -10,21 +10,29 @@ use zion\session\SessionFile;
  * Classe criada para manipular os diversos tipos de sessão
  */
 class Session {
-    // tipos: php, file, mongo, s3
-    public static $type = "php";
+    /**
+     * Tipo da sessão: php, file, mongo, s3
+     */
+    public static $defaultType = "php";
 
+    /**
+     * Instância do objeto de sessão
+     */
     public static $instance = null;
 
     /**
      * Cria uma instância de sessão se não existir
-     * @return void
      */
-    public static function createInstance(){
+    public static function createInstance($type=null){
         if(self::$instance != null){
-            return self::$instance;
+            return;
+        }
+        
+        if($type == null){
+            $type = self::$defaultType;
         }
 
-        switch(self::$type){
+        switch($type){
         case "php":
             self::$instance = new SessionPHP();
             break;
@@ -38,8 +46,8 @@ class Session {
      * Retorna uma instância de sessão
      * @return AbstractSession
      */
-    public static function getInstance() : AbstractSession {
-        self::createInstance();
+    public static function getInstance($type=null) : AbstractSession {
+        self::createInstance($type);
         return self::$instance;
     }
 

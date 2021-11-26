@@ -5,6 +5,7 @@ namespace zion\session;
 
 class SessionPHP extends AbstractSession {
     public function __construct(){
+        parent::__construct();
         session_start();
         session_write_close();
     }
@@ -16,13 +17,11 @@ class SessionPHP extends AbstractSession {
         session_write_close();
     }
 
-    public function destroy() : bool {
+    public function destroy(){
+        parent::destroy();
         session_start();
         session_destroy();
         session_write_close();
-        
-        $this->data = [];
-        return true;
     }
 }
 ?>
