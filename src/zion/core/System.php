@@ -17,25 +17,12 @@ class System {
 	private static $connection = null; 
 
 	public static function configure(){
-		// constantes
-		define("zion\APP_ROOT",dirname($_SERVER["DOCUMENT_ROOT"])."/");
-		define("zion\ROOT",\zion\APP_ROOT."vendor/vcd94xt10z/zion2/");
-
 		if(!defined("DS")){
 			define("DS",DIRECTORY_SEPARATOR);
 		}
-		
-		// ambiente
-		$env = "PRD";
-		if(strpos($_SERVER["SERVER_NAME"],".des") !== false OR
-			strpos($_SERVER["SERVER_NAME"],".dev") !== false OR
-			strpos($_SERVER["SERVER_NAME"],"des.") !== false OR
-			strpos($_SERVER["SERVER_NAME"],"dev.") !== false){
-				$env = "DEV";
-		}else if(strpos($_SERVER["SERVER_NAME"],".qas") !== false || strpos($_SERVER["SERVER_NAME"],"qas.") !== false){
-			$env = "QAS";
-		}
-		define("zion\ENV",$env);
+
+		ini_set("default_charset",\zion\CHARSET);
+	    mb_internal_encoding(\zion\CHARSET);
 
 		/*
 		* Exibição de erros
@@ -71,17 +58,10 @@ class System {
 	        System::set($key,$value);
 	    }
 	    
-	    // constantes
-	    define("zion\CHARSET","UTF-8");
-	    
 	    define("zion\HASH_PASSWORD_PREFIX","#198@Az9fF0%*");
 	    
 	    // diretórios
 	    define("zion\TEMP",\zion\APP_ROOT."tmp".\DS);
-	    
-	    // configurações
-	    ini_set("default_charset",\zion\CHARSET);
-	    mb_internal_encoding(\zion\CHARSET);
 	    
 	    self::setTimezone("-03:00");
 	    
