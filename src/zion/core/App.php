@@ -64,7 +64,7 @@ class App {
                 $action     = preg_replace("[^a-zA-Z0-9]", "", $action[0]);
                 
                 $className   = $controller."Controller";
-                $classNameNS = "\\mod\\".$module."\\controller\\".$controller."Controller";
+                $classNameNS = "\\app\\mod\\".$module."\\controller\\".$controller."Controller";
                 $classFile   = $_SERVER["DOCUMENT_ROOT"]."/modules/".$module."/controller/".$className.".php";
                 
                 if(file_exists($classFile)) {
