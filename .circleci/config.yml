@@ -13,4 +13,4 @@ jobs:
       - run: composer install
       - run: ./vendor/bin/phpunit
       - run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-      - run: php phpcs.phar --standard=./vendor/vcd94xt10z/zion2/phpcs/zion.xml --extensions=php --ignore=*/view/*,*/artifacts/* ./src/
+      - run: php phpcs.phar --standard=./phpcs/zion.xml --extensions=php --ignore=*/view/*,*/artifacts/* ./src/
