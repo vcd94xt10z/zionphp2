@@ -1,7 +1,7 @@
 <?php
 // constantes
-define("zion\APP_ROOT",dirname($_SERVER["DOCUMENT_ROOT"])."/");
-define("zion\ROOT",\zion\APP_ROOT."vendor/vcd94xt10z/zion2/");
+define("zion\ROOT",dirname(__FILE__).DIRECTORY_SEPARATOR);
+define("zion\APP_ROOT",dirname(dirname(dirname(dirname(__FILE__)))).DIRECTORY_SEPARATOR);
 define("zion\CHARSET","UTF-8");
 
 // ambiente
