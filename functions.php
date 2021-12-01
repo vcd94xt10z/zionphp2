@@ -35,7 +35,7 @@ function zion_get_config_all(){
  * @return []
  */
 function zion_get_config($filename,$stopOnError=true){
-    $file = dirname($_SERVER["DOCUMENT_ROOT"])."/".$filename;
+    $file = \zion\APP_ROOT.$filename;
     if(!file_exists($file)){
         if(!$stopOnError){
             return null;
