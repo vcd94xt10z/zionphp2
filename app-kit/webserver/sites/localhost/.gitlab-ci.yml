@@ -1,0 +1,25 @@
+image: alpine:latest
+
+stages:
+ - test
+ - deploy
+
+before_script:
+  - sh devops/docker_install.sh > /dev/null
+  - chmod +x ./devops/deploy.sh
+  - chmod 600 ./devops/privatekey.pem
+phpunit:
+  stage: test
+  allow_failure: false
+  script: phpunit
+checkcode:
+  stage: test
+  allow_failure: false
+  script: phpcs --standard=vendor/vcd94xt10z/zion2/phpcs/zion.xml ./src/
+deploy:
+  stage: deploy
+  allow_failure: false
+  only:
+    - master
+  when: manual
+  script: ./devops/deploy.sh
