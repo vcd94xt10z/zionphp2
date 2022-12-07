@@ -23,6 +23,38 @@ Para instalar ou atualizar para ultima versão, execute o comando abaixo:
 composer require vcd94xt10z/zion2:dev-main
 ```
 
+## Configuração inicial
+
+Inicialize o composer para criar seu arquivo composer.json na raiz do projeto e para configurar o autoload para usar o psr-4
+
+```bash
+composer init
+```
+
+Configure no seu vhost para o apache reconhecer o arquivo .htaccess
+
+```bash
+<VirtualHost *:80>
+  DocumentRoot /webserver/sites/localhost/public
+  ServerName localhost
+  ServerAlias *
+ 
+  <Directory /webserver/sites/localhost/public>
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+  </Directory>
+</VirtualHost>
+```
+
+Insira as linhas de cada ambiente no seu hosts
+
+```bash
+192.168.1.10 app.des
+192.168.1.10 app.qas
+192.168.1.10 app
+```
+
 ## Como começar
 
 Após instalar o framework, você já pode começar a chamar as classes do sistema. Lembrando que nada que possa afetar seu projeto será executado sem que o desenvolvedor
