@@ -1,0 +1,10 @@
+{
+    "name": "vcd94xt10z/app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "app\\mod\\": "public/modules/"
+        }
+    },
+    "require": {}
+}
